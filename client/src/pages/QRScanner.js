@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { QrReader } from 'react-qr-reader';
 import jsQR from 'jsqr';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
@@ -10,6 +9,10 @@ const QRScanner = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+  const animFrameRef = useRef(null);
   
   const [event, setEvent] = useState(null);
   const [scanMode, setScanMode] = useState('camera'); // 'camera' or 'upload'
@@ -45,6 +48,63 @@ const QRScanner = () => {
     setStats({ present, absent: total - present, total });
   };
 
+  // Start camera stream
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+        scanFrame();
+      }
+    } catch (err) {
+      toast.error('Camera access denied or not available');
+    }
+  };
+
+  // Stop camera stream
+  const stopCamera = () => {
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+  };
+
+  // Continuously read frames from the video and scan for QR
+  const scanFrame = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+      if (code) {
+        handleScan({ text: code.data });
+        return; // pause loop while processing
+      }
+    }
+    animFrameRef.current = requestAnimationFrame(scanFrame);
+  };
+
+  // Start/stop camera when mode changes
+  useEffect(() => {
+    if (scanMode === 'camera') {
+      startCamera();
+    } else {
+      stopCamera();
+    }
+    return () => stopCamera();
+  }, [scanMode]);
+
   const handleScan = async (result) => {
     if (result && !scanning) {
       setScanning(true);
@@ -54,7 +114,10 @@ const QRScanner = () => {
       } catch (error) {
         toast.error('Invalid QR code format');
       } finally {
-        setTimeout(() => setScanning(false), 2000);
+        setTimeout(() => {
+          setScanning(false);
+          animFrameRef.current = requestAnimationFrame(scanFrame); // resume scanning
+        }, 2000);
       }
     }
   };
@@ -266,12 +329,14 @@ const QRScanner = () => {
 
         {scanMode === 'camera' && (
           <div className="camera-scanner">
-            <QrReader
-              onResult={handleScan}
-              constraints={{ facingMode: 'environment' }}
-              style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}
+            <video
+              ref={videoRef}
+              style={{ width: '100%', maxWidth: '500px', display: 'block', margin: '0 auto' }}
+              muted
+              playsInline
             />
-            {scanning && <div className="scanning-indicator">🔍 Scanning...</div>}
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
+            {scanning && <div className="scanning-indicator">Scanning...</div>}
           </div>
         )}
 
