@@ -1,0 +1,204 @@
+# Felicity Event Management System - Deployment Guide
+
+## EVALUATION LINKS (fill before submission)
+
+Frontend URL: https://<your-frontend-domain>  <-- Paste your deployed frontend URL here
+
+Backend API URL (base): https://<your-backend-domain>/api  <-- Paste your deployed backend base API URL here
+
+## Deployment Configuration
+
+### Frontend URL
+https://your-frontend-domain.vercel.app
+
+### Backend API URL
+https://your-backend-domain.herokuapp.com/api
+
+## Required Environment Variables
+
+### Backend (.env)
+```
+PORT=5000
+MONGODB_URI=<your_mongodb_atlas_connection_string>
+JWT_SECRET=<your_secure_jwt_secret>
+JWT_EXPIRE=7d
+
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=<your_email>
+EMAIL_PASS=<your_email_app_password>
+
+ADMIN_EMAIL=admin@felicity.com
+ADMIN_PASSWORD=<secure_admin_password>
+
+FRONTEND_URL=<your_frontend_url>
+NODE_ENV=production
+```
+
+### Frontend (Environment Variables in Vercel/Netlify)
+```
+REACT_APP_API_URL=<your_backend_api_url>
+```
+
+## Hosting Recommendations
+
+### Backend Deployment (Choose one):
+1. **Render** (https://render.com)
+   - Free tier available
+   - Automatic HTTPS
+   - Easy deployment from GitHub
+
+2. **Railway** (https://railway.app)
+   - Good free tier
+   - Simple setup
+
+3. **Heroku** (https://heroku.com)
+   - Reliable platform
+   - Easy MongoDB integration
+
+### Frontend Deployment (Choose one):
+1. **Vercel** (https://vercel.com)
+   - Best for React apps
+   - Automatic deployments
+   - Free HTTPS
+
+2. **Netlify** (https://netlify.com)
+   - Easy setup
+   - Continuous deployment
+
+### Database:
+**MongoDB Atlas** (https://www.mongodb.com/cloud/atlas)
+- Free tier: 512 MB storage
+- Global clusters
+- Automatic backups
+
+## Deployment Steps
+
+### 1. Database Setup
+```bash
+1. Create MongoDB Atlas account
+2. Create a new cluster (Free tier M0)
+3. Add database user with password
+4. Whitelist IP addresses (0.0.0.0/0 for all)
+5. Get connection string
+```
+
+### 2. Backend Deployment (Render Example)
+```bash
+1. Push code to GitHub
+2. Connect Render to your GitHub repository
+3. Create new Web Service
+4. Select backend folder as root directory
+5. Build command: npm install
+6. Start command: npm start
+7. Add environment variables from above
+8. Deploy
+```
+
+### 3. Frontend Deployment (Vercel Example)
+```bash
+1. Push code to GitHub
+2. Import project to Vercel
+3. Select client folder as root directory
+4. Framework preset: Create React App
+5. Add environment variables
+6. Deploy
+```
+
+### Quick deploy checklist (copyable commands)
+
+Frontend (Vercel - steps to run locally before deploy):
+```bash
+# from repository root
+cd client
+npm install
+npm run build
+# Verify build output exists in client/build
+ls build
+```
+
+Backend (Render - steps to run locally before deploy):
+```bash
+# from repository root
+cd backend
+npm install
+npm start
+# Confirm server runs on configured PORT (default 5000)
+```
+
+MongoDB Atlas (create connection string):
+1. Sign in to https://www.mongodb.com/cloud/atlas
+2. Create a new free cluster
+3. Create a database user (username/password)
+4. Network Access: Allow access from your deployment IPs or 0.0.0.0/0 (for testing)
+5. Click "Connect" → "Connect your application" and copy the connection string
+   Example: mongodb+srv://<username>:<password>@cluster0.abcd.mongodb.net/felicity?retryWrites=true&w=majority
+6. Set this value as `MONGODB_URI` in your backend environment variables
+
+---
+
+Fill the EVALUATION LINKS above with your deployed URLs before final submission.
+
+### 4. Post-Deployment
+```bash
+1. Update CORS settings in backend to allow frontend domain
+2. Test admin login with configured credentials
+3. Create test organizer account
+4. Verify email sending (if configured)
+```
+
+## CORS Configuration
+
+Update backend/server.js:
+```javascript
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'https://your-frontend-domain.vercel.app'
+  ],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+```
+
+## SSL/HTTPS
+Both Vercel and Render provide automatic HTTPS certificates.
+
+## Monitoring & Logs
+- Backend logs available in hosting platform dashboard
+- Set up error tracking (optional): Sentry, LogRocket
+
+## Backup Strategy
+- MongoDB Atlas provides automatic backups
+- Export data periodically using MongoDB Compass
+
+## Performance Optimization
+1. Enable compression in Express
+2. Use CDN for static assets
+3. Implement caching strategies
+4. Database indexing (already configured in models)
+
+## Security Checklist
+✓ Environment variables properly set
+✓ JWT secret is secure and unique
+✓ MongoDB connection uses authentication
+✓ CORS configured for specific domains
+✓ Password hashing enabled (bcrypt)
+✓ HTTPS enforced
+✓ Rate limiting (recommended: express-rate-limit)
+✓ Input validation (express-validator in use)
+
+## Testing Deployment
+1. Test all authentication flows
+2. Create test events as organizer
+3. Register as participant
+4. Verify email delivery
+5. Test admin functions
+6. Check mobile responsiveness
+
+## Support & Maintenance
+- Monitor error logs regularly
+- Update dependencies monthly
+- Backup database weekly
+- Review and rotate secrets quarterly

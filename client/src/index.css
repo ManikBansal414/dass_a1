@@ -1,0 +1,239 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Global styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+  border: none;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-decoration: none !important;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Ensure Link elements with button classes have white text */
+a.btn-primary,
+a.btn-primary:visited,
+a.btn-primary:link {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+a.btn-primary:hover {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white !important;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+  color: white !important;
+}
+
+/* Ensure Link elements with secondary button have white text */
+a.btn-secondary,
+a.btn-secondary:visited,
+a.btn-secondary:link {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+a.btn-secondary:hover {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white !important;
+  font-weight: 600;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  color: white !important;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529 !important;
+  font-weight: 600;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  color: #212529 !important;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white !important;
+  font-weight: 600;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  color: white !important;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.success {
+  color: #28a745;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* Navigation */
+nav {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+  margin-bottom: 30px;
+}
+
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #007bff;
+}
+
+/* Grid layouts */
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  nav .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
