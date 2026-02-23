@@ -1,10 +1,12 @@
 # Felicity Event Management System - Deployment Guide
 
-## EVALUATION LINKS (fill before submission)
+## EVALUATION LINKS
 
-Frontend URL: https://<your-frontend-domain>  <-- Paste your deployed frontend URL here
+Frontend URL: https://dass-a1.vercel.app
 
-Backend API URL (base): https://<your-backend-domain>/api  <-- Paste your deployed backend base API URL here
+Backend API URL (base): https://felicity-backend.onrender.com/api
+
+Health Check: https://felicity-backend.onrender.com/api/health
 
 ## Deployment Configuration
 
