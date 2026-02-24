@@ -1170,6 +1170,11 @@ exports.rejectPayment = async (req, res) => {
     participantEntry.paymentStatus = 'rejected';
     participantEntry.rejectionReason = reason || 'Payment proof could not be verified';
     
+    // Decrement registrationCount since this order was counted on submission but is now rejected
+    if (event.registrationCount > 0) {
+      event.registrationCount -= 1;
+    }
+
     // Note: Stock was not decremented during order placement (when payment proof was uploaded)
     // So no need to increment stock here. Stock is only decremented on approval.
     

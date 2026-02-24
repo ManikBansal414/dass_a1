@@ -2,6 +2,268 @@
 
 A full-stack MERN event management platform for managing clubs, events, registrations, and participants at IIIT Hyderabad's annual fest.
 
+---
+
+## Live Deployment
+
+| Service | URL |
+|---|---|
+| Frontend | https://dass-a1-jldm.onrender.com |
+| Backend API | https://felicity-backend-55fy.onrender.com/api |
+| Health Check | https://felicity-backend-55fy.onrender.com/api/health |
+| Database | MongoDB Atlas (cloud) |
+
+---
+
+## Advanced Features Implemented
+
+### Tier A (Core Advanced) — 2 features selected
+
+#### Feature A2: Merchandise Payment Approval Workflow ✅
+
+**What is implemented:**
+- Participants place a merchandise order and upload a payment proof image (base64)
+- Order enters **Pending Approval** state immediately after upload
+- Organizers see a dedicated **Manage Orders** tab showing all orders with payment proof images, current status (Pending / Approved / Rejected), and approve/reject action buttons
+- On **approval**: order status → `Successful`, stock is decremented, a QR ticket is generated and emailed to the participant
+- On **rejection**: order status → `Rejected`, no QR/ticket generated
+- QR codes are **never** generated while order is Pending or Rejected
+
+**Justification for selection:**
+This feature was selected because it models a real-world payment workflow found in college fest registrations where UPI/bank transfer proof must be verified manually before confirming an order. It adds meaningful business logic around state transitions, file handling, and conditional ticket generation.
+
+**Design choices:**
+- Payment proof stored as base64 string in the database — avoids needing a separate file storage service (S3/Cloudinary) for a college project scope
+- Status machine: `Pending → Approved/Rejected` enforced server-side in `eventController.js`
+- QR generation (`qrcode` npm package) is called only inside the approval branch, never at registration time for Merchandise events
+- Email confirmation sent via Nodemailer on approval with QR code attached
+
+**Technical decisions:**
+- `Participant` subdocument in `Event` model stores `paymentProof`, `paymentProofUploadedAt`, `paymentStatus` fields
+- `getMerchandiseOrders` controller returns all orders with proof for the organizer view
+- `approveOrder` / `rejectOrder` are separate endpoints to keep logic clean
+
+---
+
+#### Feature A3: QR Scanner & Attendance Tracking ✅
+
+**What is implemented:**
+- Organizers open a dedicated **QR Scanner** page per event
+- Supports **two scan modes**: live camera scan (using `getUserMedia` + `jsQR` + canvas frame extraction) and file upload scan (using `jsQR` on uploaded image)
+- On scan: ticket QR is decoded → participant looked up → attendance marked with timestamp
+- **Duplicate scan rejection**: if participant already marked present, scan returns an error
+- **Live attendance dashboard**: shows total registered, total scanned, percentage, and a list of all participants with attended/not-attended status
+- **Export CSV**: downloads attendance data as a `.csv` file
+- **Manual override**: organizer can manually mark/unmark attendance for any participant with reason logging (`AttendanceLog` model)
+
+**Justification for selection:**
+QR-based attendance is the most practically valuable feature for a college fest — it replaces manual name-checking at entry gates. Camera-based scanning means organizers only need their phone/laptop, no external hardware.
+
+**Design choices:**
+- Native browser `getUserMedia` API used instead of `react-qr-reader` package — avoids npm peer dependency conflicts and works on all modern browsers
+- `jsQR` library decodes QR from canvas frame at 100ms intervals during camera scan
+- Duplicate scan check done server-side (`participant.attendance === true` → 400 error) to prevent race conditions
+- `AttendanceLog` is a separate MongoDB collection (not embedded) to support audit queries
+
+**Technical decisions:**
+- `markAttendance` endpoint: `POST /api/events/:id/mark-attendance` accepts `{ ticketId }` in body
+- `manualAttendanceOverride` endpoint: `POST /api/events/:id/manual-attendance` accepts `{ participantId, attended, reason }`
+- CSV export done client-side from attendance data already fetched — no separate backend endpoint needed
+
+---
+
+### Tier B (Real-time & Communication) — 2 features selected
+
+#### Feature B1: Real-Time Discussion Forum ✅
+
+**What is implemented:**
+- Discussion forum embedded on the **Event Details** page, visible only to registered participants
+- Participants can post messages, reply to threads, and react with emoji reactions (👍 ❤️ 🎉 🤔 👏)
+- Organizers can **pin** messages, **delete** any message, and post **Announcements** (highlighted differently)
+- **Message threading**: replies are nested under parent messages
+- Auto-polling every 10 seconds for new messages (simulates real-time without WebSockets)
+- 403 error shown if non-registered user tries to access forum
+
+**Justification for selection:**
+A discussion forum enables participants to ask questions about event logistics, form teams, and get organizer announcements — all without needing external tools like WhatsApp groups.
+
+**Design choices:**
+- Polling (10s interval) chosen over WebSockets — keeps the backend stateless and works within Render's free tier (no persistent connections needed)
+- `Discussion` model stores `parentMessage` ref for threading, `reactions` array for emoji counts, `isPinned` and `isAnnouncement` booleans
+- Access control enforced server-side: `GET /api/events/:id/discussions` returns 403 if requester is not a registered participant or the organizer
+
+**Technical decisions:**
+- `authorModel` field (discriminator pattern) on Discussion allows both `Participant` and `Organizer` to be authors
+- Reactions stored as `[{ user, emoji }]` — allows toggling (react again = remove reaction) and per-user deduplication
+- Frontend uses `setInterval` + `clearInterval` in `useEffect` cleanup to avoid memory leaks
+
+---
+
+#### Feature B2: Organizer Password Reset Workflow ✅
+
+**What is implemented:**
+- Organizers submit a **password reset request** from their profile page with a reason
+- Admin dashboard has a dedicated **Password Reset Requests** tab showing all requests with club name, date, reason, and status
+- Admin can **Approve** (system auto-generates a new random password, sends it to the organizer via email) or **Reject** with a comment
+- Status tracking: `Pending → Approved / Rejected`
+- Organizer can view their request history and current status
+
+**Justification for selection:**
+Organizers don't have self-service password reset (no public-facing forgot-password) — all accounts are admin-managed. This workflow gives organizers a formal channel to recover access while keeping the admin in control.
+
+**Design choices:**
+- `PasswordResetRequest` is a separate MongoDB model (not embedded in Organizer) — allows admin to query all requests across all organizers
+- New password auto-generated server-side using `crypto.randomBytes` → sent via email → admin never needs to manually create one
+- Request history preserved (not deleted on resolve) for audit trail
+
+**Technical decisions:**
+- `POST /api/organizer/password-reset-request` creates the request
+- `PUT /api/admin/password-reset/:id/approve` generates password, updates organizer record, sends email, updates request status
+- `PUT /api/admin/password-reset/:id/reject` updates status with rejection reason
+
+---
+
+### Tier C (Integration & Enhancement) — 1 feature selected
+
+#### Feature C2: Add to Calendar Integration ✅
+
+**What is implemented:**
+- On the Event Details page, registered participants see three calendar export options:
+  1. **Download .ics** — generates a standard iCalendar file downloadable for any calendar app (Apple Calendar, Thunderbird, etc.)
+  2. **Add to Google Calendar** — opens Google Calendar with event pre-filled (title, dates, description, location)
+  3. **Add to Outlook** — opens Outlook web composer with event pre-filled
+- Event name, start/end dates, description, and location (IIIT Hyderabad) are included in all formats
+
+**Justification for selection:**
+Calendar integration is a zero-backend feature (pure frontend) that adds high practical value — participants won't forget event timings if the event is in their calendar with a reminder.
+
+**Design choices:**
+- `.ics` generated entirely client-side using `Blob` + dynamic `<a>` link — no server endpoint needed
+- Google Calendar and Outlook use their public URL schemes (`calendar.google.com/render?action=TEMPLATE&...`) — no API keys required
+- Dates formatted as `YYYYMMDDTHHmmssZ` (UTC) for `.ics` compatibility
+
+**Technical decisions:**
+- `downloadICS()`, `addToGoogleCalendar()`, `addToOutlook()` are three separate functions in `EventDetails.js`
+- Only shown when `isRegistered === true` — no point exporting an event you haven't registered for
+
+---
+
+## Libraries & Frameworks
+
+### Backend
+
+| Library | Version | Justification |
+|---|---|---|
+| **Express** | ^4.18.2 | Minimal, unopinionated Node.js web framework. Chosen for its simplicity, large ecosystem, and suitability for REST APIs |
+| **Mongoose** | ^8.0.0 | MongoDB ODM — provides schema validation, middleware hooks, and a clean query API over raw MongoDB driver |
+| **jsonwebtoken** | ^9.0.2 | Stateless JWT-based auth — no session storage needed, works well with React SPA clients |
+| **bcrypt** | ^5.1.1 | Password hashing with salt rounds — industry standard for secure password storage |
+| **nodemailer** | ^6.9.7 | Email sending for ticket confirmation, password reset, and approval notifications. Supports Gmail SMTP |
+| **qrcode** | ^1.5.3 | Generates QR code images (base64 PNG) embedded in ticket emails and stored per registration |
+| **cors** | ^2.8.5 | Configures Cross-Origin Resource Sharing — required for React frontend on a different domain to call the API |
+| **dotenv** | ^16.3.1 | Loads environment variables from `.env` file — keeps secrets out of source code |
+| **express-validator** | ^7.0.1 | Request body validation middleware — validates and sanitizes inputs before they reach controllers |
+| **axios** | (via frontend) | HTTP client used on the frontend — not a backend dependency |
+
+### Frontend
+
+| Library | Version | Justification |
+|---|---|---|
+| **React** | ^18.x | Component-based UI library. Chosen for its virtual DOM, hooks API, and large ecosystem |
+| **React Router DOM** | ^6.x | Client-side routing — enables SPA navigation without full page reloads |
+| **Axios** | ^1.x | HTTP client for API calls. Chosen over `fetch` for its interceptor support (auto-attach JWT token, handle 401 globally) |
+| **React Toastify** | ^9.x | Non-blocking toast notifications for success/error feedback — better UX than `alert()` |
+| **jsQR** | ^1.4.0 | Pure JavaScript QR code decoder. Used for both camera-frame and file-upload QR scanning without native dependencies |
+| **React Router** | ^6.x | Navigation and protected route management |
+
+---
+
+## Setup & Installation (Local)
+
+### Prerequisites
+- Node.js >= 18.x
+- MongoDB running locally (`mongod`)
+- Git
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/ManikBansal414/dass_a1.git
+cd dass_a1
+```
+
+### 2. Install backend dependencies
+```bash
+npm install
+```
+
+### 3. Configure backend environment
+```bash
+cp backend/.env.example backend/.env
+# Edit backend/.env and fill in:
+# MONGODB_URI, JWT_SECRET, EMAIL_USER, EMAIL_PASS, ADMIN_EMAIL, ADMIN_PASSWORD
+```
+
+### 4. Install frontend dependencies
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+### 5. Configure frontend environment
+```bash
+# frontend/.env is already set to localhost:5000
+# No changes needed for local development
+```
+
+### 6. Run both servers
+```bash
+# Terminal 1 — Backend (from project root)
+npm run dev
+
+# Terminal 2 — Frontend
+cd frontend
+npm start
+```
+
+### 7. Access the app
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000/api
+- Health check: http://localhost:5000/api/health
+
+### 8. Default Admin credentials
+```
+Email:    admin@felicity.com
+Password: admin123
+```
+
+---
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+```env
+MONGODB_URI=mongodb://localhost:27017/felicity
+JWT_SECRET=<long random string>
+PORT=5000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=<your gmail>
+EMAIL_PASS=<gmail app password>
+EMAIL_FROM=Felicity Events <your@gmail.com>
+DISCORD_WEBHOOK_URL=<optional>
+ADMIN_EMAIL=admin@felicity.com
+ADMIN_PASSWORD=admin123
+```
+
+### Frontend (`frontend/.env`)
+```env
+REACT_APP_API_URL=http://localhost:5000/api
+DISABLE_ESLINT_PLUGIN=true
+```
+
 ## Live Deployment
 
 | Service  | URL |

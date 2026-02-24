@@ -45,10 +45,21 @@ const sendEmail = async (mailOptions) => {
 
 // Send ticket email for Normal Events (Section 9.5)
 exports.sendTicketEmail = async (participantEmail, eventDetails, ticketData) => {
+  // Extract base64 data from the data URL for use as an attachment
+  const qrBase64 = ticketData.qrCode
+    ? ticketData.qrCode.replace(/^data:image\/png;base64,/, '')
+    : null;
+
   const mailOptions = {
-    from: process.env.EMAIL_USER || 'noreply@felicity.com',
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@felicity.com',
     to: participantEmail,
-    subject: `✅ Registration Confirmed - ${eventDetails.name}`,
+    subject: `Registration Confirmed - ${eventDetails.name}`,
+    attachments: qrBase64 ? [{
+      filename: 'ticket-qr.png',
+      content: qrBase64,
+      encoding: 'base64',
+      cid: 'ticketqr'   // Content-ID so we can reference it inline
+    }] : [],
     html: `
       <!DOCTYPE html>
       <html>
@@ -70,7 +81,7 @@ exports.sendTicketEmail = async (participantEmail, eventDetails, ticketData) => 
       <body>
         <div class="container">
           <div class="header">
-            <h1>🎉 Registration Successful!</h1>
+            <h1>Registration Successful!</h1>
           </div>
           <div class="content">
             <p>Congratulations! You have successfully registered for:</p>
@@ -81,29 +92,29 @@ exports.sendTicketEmail = async (participantEmail, eventDetails, ticketData) => 
               <div class="ticket-id">${ticketData.ticketId}</div>
             </div>
 
-            ${ticketData.qrCode ? `
+            ${qrBase64 ? `
             <div class="qr-container">
-              <h3 style="color: #667eea;">📱 Your QR Code Ticket</h3>
-              <img src="${ticketData.qrCode}" alt="QR Code" style="max-width: 250px; margin: 15px auto; display: block;" />
+              <h3 style="color: #667eea;">Your QR Code Ticket</h3>
+              <img src="cid:ticketqr" alt="QR Code" style="max-width: 250px; margin: 15px auto; display: block;" />
               <p style="color: #666; font-size: 14px;">Present this QR code at the event venue</p>
             </div>
             ` : ''}
 
             <div class="details">
-              <h3>📋 Event Details</h3>
+              <h3>Event Details</h3>
               <ul style="list-style: none; padding: 0;">
-                <li>📅 <strong>Date:</strong> ${new Date(eventDetails.startDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</li>
-                <li>⏰ <strong>Time:</strong> ${new Date(eventDetails.startDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</li>
-                <li>📍 <strong>Venue:</strong> ${eventDetails.venue || 'To be announced'}</li>
-                <li>🎫 <strong>Category:</strong> ${eventDetails.category}</li>
+                <li><strong>Date:</strong> ${new Date(eventDetails.startDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</li>
+                <li><strong>Time:</strong> ${new Date(eventDetails.startDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</li>
+                <li><strong>Venue:</strong> ${eventDetails.venue || 'To be announced'}</li>
+                <li><strong>Category:</strong> ${eventDetails.category || eventDetails.eventType}</li>
               </ul>
             </div>
 
             <div class="qr-note">
-              <strong>✅ Important Notes:</strong><br>
-              • Save this email for easy access to your QR code<br>
-              • You can also view your ticket in the dashboard<br>
-              • Present the QR code at the event venue for entry
+              <strong>Important Notes:</strong><br>
+              - Save this email for easy access to your QR code<br>
+              - You can also view your ticket in the dashboard<br>
+              - Present the QR code at the event venue for entry
             </div>
 
             <p style="text-align: center; margin-top: 30px;">
@@ -125,10 +136,20 @@ exports.sendTicketEmail = async (participantEmail, eventDetails, ticketData) => 
 
 // Send confirmation email for merchandise purchase - Basic Flow (Section 9.5)
 exports.sendMerchandiseEmail = async (participantEmail, eventDetails, ticketData, orderDetails = {}) => {
+  const qrBase64 = ticketData.qrCode
+    ? ticketData.qrCode.replace(/^data:image\/png;base64,/, '')
+    : null;
+
   const mailOptions = {
-    from: process.env.EMAIL_USER || 'noreply@felicity.com',
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@felicity.com',
     to: participantEmail,
-    subject: `✅ Order Confirmed - ${eventDetails.name}`,
+    subject: `Order Confirmed - ${eventDetails.name}`,
+    attachments: qrBase64 ? [{
+      filename: 'order-qr.png',
+      content: qrBase64,
+      encoding: 'base64',
+      cid: 'orderqr'
+    }] : [],
     html: `
       <!DOCTYPE html>
       <html>
@@ -151,7 +172,7 @@ exports.sendMerchandiseEmail = async (participantEmail, eventDetails, ticketData
       <body>
         <div class="container">
           <div class="header">
-            <h1>🛍️ Order Confirmed!</h1>
+            <h1>Order Confirmed!</h1>
           </div>
           <div class="content">
             <p>Thank you for your purchase! Your order has been confirmed.</p>
@@ -162,42 +183,37 @@ exports.sendMerchandiseEmail = async (participantEmail, eventDetails, ticketData
               <div class="order-id">${ticketData.ticketId}</div>
             </div>
 
-            <div class="price">₹${eventDetails.registrationFee || 0}</div>
+            <div class="price">&#8377;${eventDetails.registrationFee || 0}</div>
 
-            ${ticketData.qrCode ? `
+            ${qrBase64 ? `
             <div class="qr-container">
-              <h3 style="color: #f5576c;">📱 Your Order QR Code</h3>
-              <img src="${ticketData.qrCode}" alt="QR Code" style="max-width: 250px; margin: 15px auto; display: block;" />
+              <h3 style="color: #f5576c;">Your Order QR Code</h3>
+              <img src="cid:orderqr" alt="QR Code" style="max-width: 250px; margin: 15px auto; display: block;" />
               <p style="color: #666; font-size: 14px;">Present this QR code for merchandise collection</p>
             </div>
             ` : ''}
 
             <div class="details">
-              <h3>🛒 Order Details</h3>
+              <h3>Order Details</h3>
               <ul style="list-style: none; padding: 0;">
-                <li>📦 <strong>Item:</strong> ${eventDetails.name}</li>
-                ${orderDetails.size ? `<li>📏 <strong>Size:</strong> ${orderDetails.size}</li>` : ''}
-                ${orderDetails.color ? `<li>🎨 <strong>Color:</strong> ${orderDetails.color}</li>` : ''}
-                ${orderDetails.variant ? `<li>✨ <strong>Variant:</strong> ${orderDetails.variant}</li>` : ''}
-                <li>📅 <strong>Order Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</li>
-                <li>💳 <strong>Payment:</strong> Completed</li>
+                <li><strong>Item:</strong> ${eventDetails.name}</li>
+                ${orderDetails.size ? `<li><strong>Size:</strong> ${orderDetails.size}</li>` : ''}
+                ${orderDetails.color ? `<li><strong>Color:</strong> ${orderDetails.color}</li>` : ''}
+                ${orderDetails.variant ? `<li><strong>Variant:</strong> ${orderDetails.variant}</li>` : ''}
+                <li><strong>Order Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</li>
+                <li><strong>Payment:</strong> Completed</li>
               </ul>
             </div>
 
             <div class="qr-note">
-              <strong>✅ Next Steps:</strong><br>
-              • Save this email for easy access to your QR code<br>
-              • Present the QR code for merchandise collection<br>
-              • Check your dashboard for delivery/pickup details
+              <strong>Next Steps:</strong><br>
+              - Save this email for easy access to your QR code<br>
+              - Present the QR code for merchandise collection<br>
+              - Check your dashboard for delivery/pickup details
             </div>
-
-            <p style="text-align: center; margin-top: 30px;">
-              <strong>Thank you for shopping with us!</strong>
-            </p>
           </div>
           <div class="footer">
             <p>This is an automated email from Felicity Event Management System.</p>
-            <p>For any queries, please contact the event organizer.</p>
           </div>
         </div>
       </body>
@@ -273,10 +289,20 @@ exports.sendMerchandisePendingEmail = async (participantEmail, eventDetails, ord
 
 // Send approval email for merchandise (Tier A - Section 13.1.2)
 exports.sendMerchandiseApprovalEmail = async (participantEmail, eventDetails, ticketData, orderDetails = {}) => {
+  const qrBase64 = ticketData.qrCode
+    ? ticketData.qrCode.replace(/^data:image\/png;base64,/, '')
+    : null;
+
   const mailOptions = {
-    from: process.env.EMAIL_USER || 'noreply@felicity.com',
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@felicity.com',
     to: participantEmail,
-    subject: `✅ Payment Approved - ${eventDetails.name}`,
+    subject: `Payment Approved - ${eventDetails.name}`,
+    attachments: qrBase64 ? [{
+      filename: 'order-qr.png',
+      content: qrBase64,
+      encoding: 'base64',
+      cid: 'approvalqr'
+    }] : [],
     html: `
       <!DOCTYPE html>
       <html>
@@ -307,10 +333,10 @@ exports.sendMerchandiseApprovalEmail = async (participantEmail, eventDetails, ti
               <div class="ticket-id">${ticketData.ticketId}</div>
             </div>
 
-            ${ticketData.qrCode ? `
+            ${qrBase64 ? `
             <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 8px;">
-              <h3 style="color: #00b894;">📱 Your QR Code</h3>
-              <img src="${ticketData.qrCode}" alt="QR Code" style="max-width: 250px; margin: 15px auto; display: block;" />
+              <h3 style="color: #00b894;">Your QR Code</h3>
+              <img src="cid:approvalqr" alt="QR Code" style="max-width: 250px; margin: 15px auto; display: block;" />
               <p style="color: #666; font-size: 14px;">Present this QR code for merchandise collection</p>
             </div>
             ` : ''}
