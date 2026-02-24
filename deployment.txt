@@ -2,7 +2,7 @@
 
 ## EVALUATION LINKS
 
-Frontend URL: https://dass-a1.vercel.app
+Frontend URL: https://dass-a1-jldm.onrender.com
 
 Backend API URL (base): https://felicity-backend-55fy.onrender.com/api
 
