@@ -102,14 +102,14 @@ const OrganizerEventDetail = () => {
       {/* Header with Back Button */}
       <div className="page-header">
         <button onClick={() => navigate('/organizer/dashboard')} className="btn btn-secondary">
-          ← Back to Dashboard
+           Back to Dashboard
         </button>
         <h1>{event.name}</h1>
       </div>
 
       {/* Event Overview Card */}
       <div className="event-overview card">
-        <h2>📋 Event Overview</h2>
+        <h2> Event Overview</h2>
         <div className="overview-grid">
           <div className="overview-item">
             <span className="label">Event Type:</span>
@@ -186,12 +186,12 @@ const OrganizerEventDetail = () => {
       {/* Analytics Card */}
       <div className="analytics-section card">
         <div className="section-header">
-          <h2>📊 Analytics & Insights</h2>
+          <h2> Analytics & Insights</h2>
         </div>
 
         <div className="analytics-grid">
           <div className="analytics-card registrations">
-            <div className="icon">👥</div>
+            <div className="icon"></div>
             <div className="data">
               <h3>{event.registrationCount || 0}</h3>
               <p>Total {event.eventType === 'Merchandise' ? 'Orders' : 'Registrations'}</p>
@@ -202,7 +202,7 @@ const OrganizerEventDetail = () => {
           </div>
 
           <div className="analytics-card attendance">
-            <div className="icon">✓</div>
+            <div className="icon"></div>
             <div className="data">
               <h3>{analytics?.attendanceCount || 0}</h3>
               <p>Attendance Marked</p>
@@ -213,7 +213,7 @@ const OrganizerEventDetail = () => {
           </div>
 
           <div className="analytics-card revenue">
-            <div className="icon">💰</div>
+            <div className="icon"></div>
             <div className="data">
               <h3>₹{event.revenue || 0}</h3>
               <p>Revenue Generated</p>
@@ -223,7 +223,7 @@ const OrganizerEventDetail = () => {
 
           {event.eventType === 'Merchandise' && (
             <div className="analytics-card pending">
-              <div className="icon">⏳</div>
+              <div className="icon"></div>
               <div className="data">
                 <h3>{analytics?.pendingPayments || 0}</h3>
                 <p>Pending Approvals</p>
@@ -234,7 +234,7 @@ const OrganizerEventDetail = () => {
 
           {analytics?.teamStats && (
             <div className="analytics-card teams">
-              <div className="icon">👨‍👩‍👧‍👦</div>
+              <div className="icon"></div>
               <div className="data">
                 <h3>{analytics.teamStats.totalTeams || 0}</h3>
                 <p>Teams Registered</p>
@@ -248,17 +248,17 @@ const OrganizerEventDetail = () => {
       {/* Participants List Card */}
       <div className="participants-section card">
         <div className="section-header">
-          <h2>👥 Participants List ({filteredParticipants.length})</h2>
+          <h2> Participants List ({filteredParticipants.length})</h2>
           <div className="header-actions">
             <button onClick={handleExportCSV} className="btn btn-primary">
-              📊 Export CSV
+               Export CSV
             </button>
             <Link to={`/organizer/events/${eventId}/scanner`} className="btn btn-secondary">
-              📷 QR Scanner
+               QR Scanner
             </Link>
             {/* Edit button - navigates to the EditEvent page (organizer/admin only route is protected in App.js) */}
             <Link to={`/organizer/events/${eventId}/edit`} className="btn btn-primary">
-              ✏️ Edit Event
+               Edit Event
             </Link>
             {event.eventType === 'Merchandise' && (
               <Link to={`/organizer/events/${eventId}/orders`} className="btn btn-secondary">
@@ -348,9 +348,9 @@ const OrganizerEventDetail = () => {
                     {event.eventType === 'Merchandise' && (
                       <td>
                         <span className={`payment-status ${p.paymentStatus}`}>
-                          {p.paymentStatus === 'completed' && '✓ Paid'}
-                          {p.paymentStatus === 'pending' && '⏳ Pending'}
-                          {p.paymentStatus === 'rejected' && '✗ Rejected'}
+                          {p.paymentStatus === 'completed' && ' Paid'}
+                          {p.paymentStatus === 'pending' && ' Pending'}
+                          {p.paymentStatus === 'rejected' && ' Rejected'}
                         </span>
                       </td>
                     )}
@@ -360,7 +360,7 @@ const OrganizerEventDetail = () => {
                     <td>
                       {p.attendance ? (
                         <span className="attendance-badge present">
-                          ✓ Present
+                           Present
                           <br />
                           <small>
                             {new Date(p.attendanceTime).toLocaleString('en-IN', {
@@ -372,7 +372,7 @@ const OrganizerEventDetail = () => {
                           </small>
                         </span>
                       ) : (
-                        <span className="attendance-badge absent">✗ Absent</span>
+                        <span className="attendance-badge absent"> Absent</span>
                       )}
                     </td>
                     <td>
@@ -385,7 +385,7 @@ const OrganizerEventDetail = () => {
                               alert(JSON.stringify(p.customFormData, null, 2));
                             }}
                           >
-                            📝
+                            
                           </button>
                         )}
                         {event.eventType === 'Merchandise' && p.merchandiseOptions && (
@@ -397,7 +397,7 @@ const OrganizerEventDetail = () => {
                               alert(details);
                             }}
                           >
-                            🛍️
+                            
                           </button>
                         )}
                       </div>

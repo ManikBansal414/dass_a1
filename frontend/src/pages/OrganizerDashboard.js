@@ -65,7 +65,7 @@ const OrganizerDashboard = () => {
     <div className="container organizer-dashboard">
       <div className="dashboard-header">
         <div>
-          <h1>📊 Organizer Dashboard</h1>
+          <h1> Organizer Dashboard</h1>
           <p className="welcome-text">Welcome back, {dashboard?.organizerName || 'Organizer'}!</p>
         </div>
         <Link to="/organizer/create-event" className="btn btn-primary btn-lg">
@@ -77,32 +77,32 @@ const OrganizerDashboard = () => {
       {dashboard?.analytics && (
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="stat-icon">📅</div>
+            <div className="stat-icon"></div>
             <div className="stat-number">{dashboard.analytics.totalEvents || 0}</div>
             <div className="stat-label">Total Events</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">✅</div>
+            <div className="stat-icon"></div>
             <div className="stat-number">{dashboard.analytics.completedEvents || 0}</div>
             <div className="stat-label">Completed Events</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">👥</div>
+            <div className="stat-icon"></div>
             <div className="stat-number">{dashboard.analytics.totalRegistrations || 0}</div>
             <div className="stat-label">Total Registrations</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">💰</div>
+            <div className="stat-icon"></div>
             <div className="stat-number">₹{dashboard.analytics.totalRevenue || 0}</div>
             <div className="stat-label">Total Revenue</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">🎯</div>
+            <div className="stat-icon"></div>
             <div className="stat-number">{dashboard.analytics.totalAttendance || 0}</div>
             <div className="stat-label">Total Attendance</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">❤️</div>
+            <div className="stat-icon"></div>
             <div className="stat-number">{dashboard.analytics.followers || 0}</div>
             <div className="stat-label">Followers</div>
           </div>
@@ -112,7 +112,7 @@ const OrganizerDashboard = () => {
       {/* Events Carousel with Filters */}
       <div className="dashboard-section card">
         <div className="section-header">
-          <h2>📋 My Events</h2>
+          <h2> My Events</h2>
           <Link to="/organizer/create-event" className="btn btn-primary btn-sm">
             + Create Event
           </Link>
@@ -164,67 +164,67 @@ const OrganizerDashboard = () => {
                 <h3>{event.name}</h3>
                 
                 <div className="event-meta-small">
-                  <p>📅 {new Date(event.startDate).toLocaleDateString('en-IN', {
+                  <p> {new Date(event.startDate).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric'
                   })}</p>
-                  <p>👥 {event.registrationCount || 0}
+                  <p> {event.registrationCount || 0}
                     {event.registrationLimit && ` / ${event.registrationLimit}`} registrations
                   </p>
                   {event.eventType === 'Merchandise' && event.merchandiseDetails && (
-                    <p>📦 Stock: {event.merchandiseDetails.stockQuantity || 0}</p>
+                    <p> Stock: {event.merchandiseDetails.stockQuantity || 0}</p>
                   )}
-                  <p>💰 Revenue: ₹{event.revenue || 0}</p>
+                  <p> Revenue: ₹{event.revenue || 0}</p>
                   {event.registrationFee > 0 && (
-                    <p>💵 Fee: ₹{event.registrationFee}</p>
+                    <p> Fee: ₹{event.registrationFee}</p>
                   )}
                 </div>
 
                 <div className="event-actions-org">
                   <Link to={`/organizer/events/${event._id}`} className="btn btn-primary btn-sm">
-                    �� Analytics
+                     Analytics
                   </Link>
                   <Link to={`/events/${event._id}`} className="btn btn-secondary btn-sm">
-                    👁️ Public View
+                     Public View
                   </Link>
                   <Link to={`/organizer/events/${event._id}/scanner`} className="btn btn-primary btn-sm">
-                    📷 QR Scanner
+                     QR Scanner
                   </Link>
                   {event.eventType === 'Merchandise' && (
                     <Link to={`/organizer/events/${event._id}/orders`} className="btn btn-primary btn-sm">
-                      📦 Orders
+                       Orders
                     </Link>
                   )}
                   {event.status === 'Draft' && (
                     <>
                       <Link to={`/organizer/events/${event._id}/edit`} className="btn btn-primary btn-sm">
-                        ✏️ Edit
+                         Edit
                       </Link>
                       <button
                         onClick={() => handlePublishEvent(event._id)}
                         className="btn btn-success btn-sm"
                       >
-                        ✓ Publish
+                         Publish
                       </button>
                       <button
                         onClick={() => handleDeleteEvent(event._id, event.name)}
                         className="btn btn-danger btn-sm"
                       >
-                        🗑️ Delete
+                         Delete
                       </button>
                     </>
                   )}
                   {event.status === 'Published' && (
                     <>
                       <Link to={`/organizer/events/${event._id}/edit`} className="btn btn-primary btn-sm">
-                        ✏️ Edit
+                         Edit
                       </Link>
                       <button
                         onClick={() => handleDeleteEvent(event._id, event.name)}
                         className="btn btn-danger btn-sm"
                       >
-                        🗑️ Delete
+                         Delete
                       </button>
                     </>
                   )}
@@ -233,7 +233,7 @@ const OrganizerDashboard = () => {
                       onClick={() => handleDeleteEvent(event._id, event.name)}
                       className="btn btn-danger btn-sm"
                     >
-                      🗑️ Delete
+                       Delete
                     </button>
                   )}
                 </div>
@@ -242,7 +242,7 @@ const OrganizerDashboard = () => {
           </div>
         ) : (
           <div className="no-data">
-            <p>📭 No {filterStatus !== 'all' ? filterStatus : ''} events found</p>
+            <p> No {filterStatus !== 'all' ? filterStatus : ''} events found</p>
             {filterStatus === 'all' && (
               <Link to="/organizer/create-event" className="btn btn-primary">
                 + Create Your First Event

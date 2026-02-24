@@ -64,7 +64,7 @@ const ClubsPage = () => {
   return (
     <div className="container clubs-page">
       <div className="page-header">
-        <h1>🎭 Clubs & Organizers</h1>
+        <h1> Clubs & Organizers</h1>
         <p className="subtitle">Follow your favorite clubs to stay updated with their events</p>
       </div>
 
@@ -86,7 +86,7 @@ const ClubsPage = () => {
                     <p className="club-category-badge">{club.category}</p>
                   </div>
                   {isFollowing(club._id) && (
-                    <span className="following-badge">✓ Following</span>
+                    <span className="following-badge"> Following</span>
                   )}
                 </div>
 
@@ -94,14 +94,14 @@ const ClubsPage = () => {
 
                 <div className="club-stats-row">
                   <div className="stat-item">
-                    <span className="stat-icon">👥</span>
+                    <span className="stat-icon"></span>
                     <div>
                       <strong>{club.followers?.length || 0}</strong>
                       <span>Followers</span>
                     </div>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-icon">🎯</span>
+                    <span className="stat-icon"></span>
                     <div>
                       <strong>{club.events?.length || 0}</strong>
                       <span>Events</span>
@@ -110,8 +110,8 @@ const ClubsPage = () => {
                 </div>
 
                 <div className="club-contact">
-                  <p>📧 {club.contactEmail}</p>
-                  {club.contactNumber && <p>📞 {club.contactNumber}</p>}
+                  <p> {club.contactEmail}</p>
+                  {club.contactNumber && <p> {club.contactNumber}</p>}
                 </div>
 
                 <div className="club-actions">
@@ -122,7 +122,7 @@ const ClubsPage = () => {
                     onClick={() => handleFollowToggle(club._id)}
                     className={`btn ${isFollowing(club._id) ? 'btn-outline' : 'btn-primary'}`}
                   >
-                    {isFollowing(club._id) ? '✓ Following' : '+ Follow'}
+                    {isFollowing(club._id) ? ' Following' : '+ Follow'}
                   </button>
                 </div>
               </div>

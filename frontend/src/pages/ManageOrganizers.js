@@ -85,7 +85,7 @@ const ManageOrganizers = () => {
   };
 
   const handlePermanentDelete = async (id, name) => {
-    if (!window.confirm(`⚠️ WARNING: This will PERMANENTLY DELETE "${name}" and cannot be undone!\n\nAre you absolutely sure?`)) {
+    if (!window.confirm(` WARNING: This will PERMANENTLY DELETE "${name}" and cannot be undone!\n\nAre you absolutely sure?`)) {
       return;
     }
 
@@ -116,7 +116,7 @@ const ManageOrganizers = () => {
               <p><strong>Login Email:</strong> {credentials.email}</p>
               <p><strong>Temporary Password:</strong> <span className="password">{credentials.password}</span></p>
             </div>
-            <p className="warning-text">⚠️ Share these credentials with the organizer. They should change the password after first login.</p>
+            <p className="warning-text"> Share these credentials with the organizer. They should change the password after first login.</p>
             <button onClick={() => setShowCredentials(false)} className="btn btn-primary">
               Close
             </button>
@@ -131,7 +131,7 @@ const ManageOrganizers = () => {
           className="btn btn-primary"
           style={{ marginBottom: '20px' }}
         >
-          {showCreateForm ? '❌ Cancel' : '➕ Add New Organizer'}
+          {showCreateForm ? ' Cancel' : ' Add New Organizer'}
         </button>
 
         {showCreateForm && (

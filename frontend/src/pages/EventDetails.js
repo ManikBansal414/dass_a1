@@ -252,12 +252,12 @@ END:VCALENDAR`;
               
               {isAlreadyRegistered ? (
                 <div className="registered-message">
-                  <p>✓ You are already registered for this event</p>
+                  <p> You are already registered for this event</p>
                   {event.participants?.find(p => p.participant === user?.id)?.paymentStatus === 'pending' && (
-                    <p className="payment-pending-msg">⏳ Payment proof under review</p>
+                    <p className="payment-pending-msg"> Payment proof under review</p>
                   )}
                   {event.participants?.find(p => p.participant === user?.id)?.paymentStatus === 'rejected' && (
-                    <p className="payment-rejected-msg">❌ Payment was rejected</p>
+                    <p className="payment-rejected-msg"> Payment was rejected</p>
                   )}
                   <button
                     onClick={() => navigate('/participant/dashboard')}
@@ -271,7 +271,7 @@ END:VCALENDAR`;
                   {/* Merchandise Options */}
                   {event.eventType === 'Merchandise' && event.merchandiseDetails && (
                     <div className="merchandise-options">
-                      <h4>🛍️ Merchandise Options</h4>
+                      <h4> Merchandise Options</h4>
                       
                       {event.merchandiseDetails.size && event.merchandiseDetails.size.length > 0 && (
                         <div className="form-group">
@@ -322,15 +322,15 @@ END:VCALENDAR`;
                       
                       {event.merchandiseDetails.stockQuantity !== undefined && (
                         <p className="stock-info">
-                          📦 {event.merchandiseDetails.stockQuantity > 0 
+                           {event.merchandiseDetails.stockQuantity > 0 
                             ? `${event.merchandiseDetails.stockQuantity} items in stock` 
-                            : '⚠️ Out of stock'}
+                            : ' Out of stock'}
                         </p>
                       )}
 
                       {/* Payment Proof Upload */}
                       <div className="payment-proof-section">
-                        <h4>💳 Payment Proof</h4>
+                        <h4> Payment Proof</h4>
                         <p className="hint-text">Upload a screenshot of your payment (UPI/bank transfer)</p>
                         <input
                           type="file"
@@ -461,7 +461,7 @@ END:VCALENDAR`;
 
             {/* Add to Calendar Card */}
             <div className="calendar-card card">
-              <h3>📅 Add to Calendar</h3>
+              <h3> Add to Calendar</h3>
               <p className="calendar-hint">Never miss this event!</p>
               <div className="calendar-buttons">
                 <button onClick={addToGoogleCalendar} className="btn btn-sm btn-primary">
@@ -471,7 +471,7 @@ END:VCALENDAR`;
                   Outlook
                 </button>
                 <button onClick={downloadICS} className="btn btn-sm btn-secondary">
-                  📥 Download .ics
+                   Download .ics
                 </button>
               </div>
             </div>

@@ -132,7 +132,7 @@ const DiscussionForum = ({ eventId }) => {
       <form onSubmit={handlePostMessage} className="post-form">
         {replyTo && (
           <div className="reply-indicator">
-            Replying to message... <button type="button" onClick={() => setReplyTo(null)}>✕</button>
+            Replying to message... <button type="button" onClick={() => setReplyTo(null)}></button>
           </div>
         )}
         
@@ -199,7 +199,7 @@ const DiscussionForum = ({ eventId }) => {
 
                   <div className="message-actions">
                     <div className="reactions">
-                      {['👍', '❤️', '🎉', '🤔', '👏'].map(emoji => {
+                      {['', '', '', '', ''].map(emoji => {
                         const count = discussion.reactions?.filter(r => r.emoji === emoji).length || 0;
                         const hasReacted = discussion.reactions?.some(
                           r => r.emoji === emoji && r.user?.toString() === user?.id
@@ -209,7 +209,7 @@ const DiscussionForum = ({ eventId }) => {
                             key={emoji}
                             onClick={() => handleReact(discussion._id, emoji)}
                             className={`reaction-btn ${hasReacted ? 'active' : ''}`}
-                            style={{ display: count > 0 || emoji === '👍' ? 'inline-block' : 'none' }}
+                            style={{ display: count > 0 || emoji === '' ? 'inline-block' : 'none' }}
                           >
                             {emoji} {count > 0 ? count : ''}
                           </button>

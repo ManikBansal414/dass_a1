@@ -100,7 +100,7 @@ const OrganizerDetail = () => {
                 onClick={handleFollowToggle}
                 className={`btn ${isFollowing ? 'btn-outline' : 'btn-primary'} btn-lg`}
               >
-                {isFollowing ? '✓ Following' : '+ Follow'}
+                {isFollowing ? ' Following' : '+ Follow'}
               </button>
             )}
           </div>
@@ -109,12 +109,12 @@ const OrganizerDetail = () => {
           
           <div className="organizer-contact-info">
             <div className="contact-item">
-              <span className="icon">📧</span>
+              <span className="icon"></span>
               <span>{organizer.contactEmail}</span>
             </div>
             {organizer.contactNumber && (
               <div className="contact-item">
-                <span className="icon">📞</span>
+                <span className="icon"></span>
                 <span>{organizer.contactNumber}</span>
               </div>
             )}
@@ -140,7 +140,7 @@ const OrganizerDetail = () => {
       {/* Events Section */}
       <div className="organizer-events card">
         <div className="section-header">
-          <h2>📅 Events</h2>
+          <h2> Events</h2>
         </div>
 
         {/* Tabs */}
@@ -170,7 +170,7 @@ const OrganizerDetail = () => {
                 
                 <div className="event-meta">
                   <div className="meta-item">
-                    <span className="meta-icon">📅</span>
+                    <span className="meta-icon"></span>
                     <span>{new Date(event.startDate).toLocaleDateString('en-IN', {
                       day: 'numeric',
                       month: 'short',
@@ -178,12 +178,12 @@ const OrganizerDetail = () => {
                     })}</span>
                   </div>
                   <div className="meta-item">
-                    <span className="meta-icon">👥</span>
+                    <span className="meta-icon"></span>
                     <span>{event.registrationCount || 0} registered</span>
                   </div>
                   {event.registrationFee > 0 && (
                     <div className="meta-item">
-                      <span className="meta-icon">💰</span>
+                      <span className="meta-icon"></span>
                       <span>₹{event.registrationFee}</span>
                     </div>
                   )}

@@ -266,7 +266,7 @@ const CreateEvent = () => {
   return (
     <div className="container create-event-container">
       <div className="create-event-header">
-        <h1>📅 Create New Event</h1>
+        <h1> Create New Event</h1>
         <p>Fill in the details to create your event</p>
       </div>
 
@@ -434,7 +434,7 @@ const CreateEvent = () => {
                     className={`interest-tag ${formData.tags.includes(tag) ? 'selected' : ''}`}
                   >
                     {tag}
-                    {formData.tags.includes(tag) && <span className="check-icon">✓</span>}
+                    {formData.tags.includes(tag) && <span className="check-icon"></span>}
                   </button>
                 ))}
               </div>
@@ -447,7 +447,7 @@ const CreateEvent = () => {
 
             <div className="form-actions">
               <button type="button" onClick={handleNext} className="btn btn-primary">
-                Next →
+                Next 
               </button>
             </div>
           </div>
@@ -455,7 +455,7 @@ const CreateEvent = () => {
 
         {step === 2 && formData.eventType === 'Normal' && (
           <div className="form-step">
-            <h2>📝 Custom Registration Form Builder</h2>
+            <h2> Custom Registration Form Builder</h2>
             <p className="form-hint">Create custom fields for participants to fill during registration</p>
 
             {/* Add New Field */}
@@ -533,10 +533,10 @@ const CreateEvent = () => {
                       </div>
                       <div className="field-actions">
                         <button type="button" onClick={() => moveFieldUp(index)} disabled={index === 0}>
-                          ↑
+                          
                         </button>
                         <button type="button" onClick={() => moveFieldDown(index)} disabled={index === customFormFields.length - 1}>
-                          ↓
+                          
                         </button>
                         <button type="button" onClick={() => removeFormField(index)} className="btn-danger-sm">
                           ×
@@ -550,7 +550,7 @@ const CreateEvent = () => {
 
             <div className="form-actions">
               <button type="button" onClick={handleBack} className="btn btn-secondary">
-                ← Back
+                 Back
               </button>
               <button type="button" onClick={(e) => handleSubmit(e, 'Draft')} className="btn btn-secondary">
                 Save as Draft
@@ -564,7 +564,7 @@ const CreateEvent = () => {
 
         {step === 2 && formData.eventType === 'Merchandise' && (
           <div className="form-step">
-            <h2>📦 Merchandise Details</h2>
+            <h2> Merchandise Details</h2>
 
             <div className="form-group">
               <label>Sizes</label>
@@ -665,7 +665,7 @@ const CreateEvent = () => {
 
             <div className="form-actions">
               <button type="button" onClick={handleBack} className="btn btn-secondary">
-                ← Back
+                 Back
               </button>
               <button type="button" onClick={(e) => handleSubmit(e, 'Draft')} className="btn btn-secondary">
                 Save as Draft

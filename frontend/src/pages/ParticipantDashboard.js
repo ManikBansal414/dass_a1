@@ -125,7 +125,7 @@ const ParticipantDashboard = () => {
       {/* Upcoming Events Section - Available to Register */}
       <div className="dashboard-section card">
         <div className="section-header">
-          <h2>📅 Upcoming Events</h2>
+          <h2> Upcoming Events</h2>
           <Link to="/events" className="btn btn-primary btn-sm">Browse All Events</Link>
         </div>
         {dashboard?.availableEvents && dashboard.availableEvents.length > 0 ? (
@@ -136,16 +136,16 @@ const ParticipantDashboard = () => {
                 <h3>{event.name}</h3>
                 <p className="event-description">{event.description?.substring(0, 100)}...</p>
                 <div className="event-info">
-                  <p><strong>📍 Organizer:</strong> {event.organizer?.name}</p>
-                  <p><strong>📅 Date:</strong> {new Date(event.startDate).toLocaleDateString('en-IN', {
+                  <p><strong> Organizer:</strong> {event.organizer?.name}</p>
+                  <p><strong> Date:</strong> {new Date(event.startDate).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
                   })}</p>
-                  <p><strong>💰 Fee:</strong> {event.registrationFee === 0 ? 'Free' : `₹${event.registrationFee}`}</p>
-                  <p><strong>🎯 Eligibility:</strong> {event.eligibility}</p>
+                  <p><strong> Fee:</strong> {event.registrationFee === 0 ? 'Free' : `₹${event.registrationFee}`}</p>
+                  <p><strong> Eligibility:</strong> {event.eligibility}</p>
                 </div>
                 {event.tags && event.tags.length > 0 && (
                   <div className="event-tags-mini">
@@ -164,7 +164,7 @@ const ParticipantDashboard = () => {
           </div>
         ) : (
           <div className="no-data">
-            <p>📭 No upcoming events available</p>
+            <p> No upcoming events available</p>
             <Link to="/events" className="btn btn-primary">Browse Events</Link>
           </div>
         )}
@@ -174,32 +174,32 @@ const ParticipantDashboard = () => {
       {dashboard?.upcomingEvents && dashboard.upcomingEvents.length > 0 && (
         <div className="dashboard-section card">
           <div className="section-header">
-            <h2>🎫 My Registered Events</h2>
+            <h2> My Registered Events</h2>
           </div>
           <div className="events-grid">
             {dashboard.upcomingEvents.map((registration) => (
               <div key={registration._id} className="event-card upcoming">
                 <div className="event-type-badge">{registration.event?.eventType}</div>
                 {registration.paymentStatus === 'pending' && (
-                  <div className="pending-badge">⏳ Payment Pending</div>
+                  <div className="pending-badge"> Payment Pending</div>
                 )}
                 {registration.paymentStatus === 'rejected' && (
-                  <div className="rejected-badge">❌ Payment Rejected</div>
+                  <div className="rejected-badge"> Payment Rejected</div>
                 )}
                 <h3>{registration.event?.name}</h3>
                 <div className="event-info">
-                  <p><strong>📍 Organizer:</strong> {registration.event?.organizer?.name}</p>
-                  <p><strong>📅 Date:</strong> {new Date(registration.event?.startDate).toLocaleDateString('en-IN', {
+                  <p><strong> Organizer:</strong> {registration.event?.organizer?.name}</p>
+                  <p><strong> Date:</strong> {new Date(registration.event?.startDate).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
                   })}</p>
-                  {registration.team && <p><strong>👥 Team:</strong> {registration.team}</p>}
-                  <p><strong>🎫 Ticket ID:</strong> <span className="ticket-id">{registration.ticketId}</span></p>
+                  {registration.team && <p><strong> Team:</strong> {registration.team}</p>}
+                  <p><strong> Ticket ID:</strong> <span className="ticket-id">{registration.ticketId}</span></p>
                   {registration.paymentStatus && (
-                    <p><strong>💳 Payment:</strong> <span className={`status-badge ${registration.paymentStatus}`}>
+                    <p><strong> Payment:</strong> <span className={`status-badge ${registration.paymentStatus}`}>
                       {registration.paymentStatus}
                     </span></p>
                   )}
@@ -213,7 +213,7 @@ const ParticipantDashboard = () => {
                   </div>
                 ) : registration.paymentStatus === 'pending' ? (
                   <div className="qr-pending-notice">
-                    <p>🔒 QR code will be available after payment approval</p>
+                    <p> QR code will be available after payment approval</p>
                   </div>
                 ) : null}
                 <div className="event-actions">
@@ -243,7 +243,7 @@ const ParticipantDashboard = () => {
       {recommendedEvents.length > 0 && (
         <div className="dashboard-section card">
           <div className="section-header">
-            <h2>🌟 Recommended For You</h2>
+            <h2> Recommended For You</h2>
             <Link to="/events" className="btn btn-secondary btn-sm">See All</Link>
           </div>
           <p style={{ color: '#666', marginBottom: '15px', fontSize: '14px' }}>
@@ -256,14 +256,14 @@ const ParticipantDashboard = () => {
                 <h3>{event.name}</h3>
                 <p className="event-description">{event.description?.substring(0, 100)}...</p>
                 <div className="event-info">
-                  <p><strong>📍 Organizer:</strong> {event.organizer?.name}</p>
-                  <p><strong>📅 Date:</strong> {new Date(event.startDate).toLocaleDateString('en-IN', {
+                  <p><strong> Organizer:</strong> {event.organizer?.name}</p>
+                  <p><strong> Date:</strong> {new Date(event.startDate).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric'
                   })}</p>
-                  <p><strong>💰 Fee:</strong> {event.registrationFee === 0 ? 'Free' : `₹${event.registrationFee}`}</p>
-                  <p><strong>🎯 Eligibility:</strong> {event.eligibility}</p>
+                  <p><strong> Fee:</strong> {event.registrationFee === 0 ? 'Free' : `₹${event.registrationFee}`}</p>
+                  <p><strong> Eligibility:</strong> {event.eligibility}</p>
                 </div>
                 {event.tags && event.tags.length > 0 && (
                   <div className="event-tags-mini">
@@ -283,7 +283,7 @@ const ParticipantDashboard = () => {
 
       {/* Participation History with Tabs */}
       <div className="dashboard-section card">
-        <h2>📊 Participation History</h2>
+        <h2> Participation History</h2>
         
         {/* Tabs */}
         <div className="tabs">
@@ -390,7 +390,7 @@ const ParticipantDashboard = () => {
       <div className="dashboard-grid-2">
         <div className="dashboard-section card">
           <div className="section-header">
-            <h2>🎭 Followed Clubs</h2>
+            <h2> Followed Clubs</h2>
             <Link to="/clubs" className="btn btn-secondary btn-sm">Browse Clubs</Link>
           </div>
           {dashboard?.followedClubs && dashboard.followedClubs.length > 0 ? (
@@ -421,7 +421,7 @@ const ParticipantDashboard = () => {
 
         <div className="dashboard-section card">
           <div className="section-header">
-            <h2>💡 Your Interests</h2>
+            <h2> Your Interests</h2>
             <Link to="/participant/profile" className="btn btn-secondary btn-sm">Edit</Link>
           </div>
           <p style={{ fontSize: '12px', color: '#999', marginBottom: '10px' }}>
@@ -446,10 +446,10 @@ const ParticipantDashboard = () => {
       {showTicketModal && selectedTicket && (
         <div className="modal-overlay" onClick={() => setShowTicketModal(false)}>
           <div className="ticket-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setShowTicketModal(false)}>✕</button>
+            <button className="modal-close" onClick={() => setShowTicketModal(false)}></button>
             
             <div className="ticket-container">
-              <h2>🎫 Event Ticket</h2>
+              <h2> Event Ticket</h2>
               
               <div className="ticket-details">
                 <h3>{selectedTicket.event?.name}</h3>
@@ -470,12 +470,12 @@ const ParticipantDashboard = () => {
 
               <div className="qr-code-display">
                 <img src={selectedTicket.qrCode} alt="Ticket QR Code" />
-                <p className="qr-instruction">📱 Show this QR code at the event entrance</p>
+                <p className="qr-instruction"> Show this QR code at the event entrance</p>
               </div>
 
               <div className="ticket-actions">
                 <button onClick={downloadTicket} className="btn btn-primary">
-                  📥 Download Ticket
+                   Download Ticket
                 </button>
                 <button onClick={() => setShowTicketModal(false)} className="btn btn-secondary">
                   Close

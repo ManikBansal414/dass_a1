@@ -236,7 +236,7 @@ const Profile = () => {
                     onClick={() => handleToggleInterest(interest)}
                     className={`interest-pill ${formData.areasOfInterest.includes(interest) ? 'selected' : ''}`}
                   >
-                    {formData.areasOfInterest.includes(interest) ? '✓ ' : ''}{interest}
+                    {formData.areasOfInterest.includes(interest) ? ' ' : ''}{interest}
                   </button>
                 ))}
               </div>

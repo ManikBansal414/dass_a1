@@ -191,7 +191,7 @@ const QRScanner = () => {
         method
       });
 
-      toast.success(`✅ ${data.participant.firstName} ${data.participant.lastName} - Attendance marked!`);
+      toast.success(` ${data.participant.firstName} ${data.participant.lastName} - Attendance marked!`);
       
       // Update attendance list
       setAttendance(prev => prev.map(p => 
@@ -205,7 +205,7 @@ const QRScanner = () => {
       fetchEventData(); // Refresh data
     } catch (error) {
       if (error.response?.data?.message === 'Attendance already marked') {
-        toast.warning('⚠️ Attendance already marked for this participant');
+        toast.warning(' Attendance already marked for this participant');
       } else {
         toast.error(error.response?.data?.message || 'Failed to mark attendance');
       }
@@ -274,11 +274,11 @@ const QRScanner = () => {
     <div className="qr-scanner-page">
       <div className="scanner-header">
         <button onClick={() => navigate(-1)} className="btn btn-secondary">
-          ← Back
+           Back
         </button>
-        <h1>📱 QR Scanner - {event.name}</h1>
+        <h1> QR Scanner - {event.name}</h1>
         <button onClick={exportAttendance} className="btn btn-primary">
-          📊 Export CSV
+           Export CSV
         </button>
       </div>
 
@@ -311,19 +311,19 @@ const QRScanner = () => {
             className={`mode-btn ${scanMode === 'camera' ? 'active' : ''}`}
             onClick={() => setScanMode('camera')}
           >
-            📷 Camera Scan
+             Camera Scan
           </button>
           <button
             className={`mode-btn ${scanMode === 'upload' ? 'active' : ''}`}
             onClick={() => setScanMode('upload')}
           >
-            📤 Upload QR
+             Upload QR
           </button>
           <button
             className={`mode-btn ${scanMode === 'manual' ? 'active' : ''}`}
             onClick={() => setScanMode('manual')}
           >
-            ⌨️ Manual Entry
+             Manual Entry
           </button>
         </div>
 
@@ -353,7 +353,7 @@ const QRScanner = () => {
               onClick={() => fileInputRef.current?.click()}
               className="btn btn-primary btn-lg"
             >
-              📤 Upload QR Code Image
+               Upload QR Code Image
             </button>
             <p className="hint">Upload a screenshot or photo of the QR code</p>
           </div>
@@ -370,7 +370,7 @@ const QRScanner = () => {
               onKeyPress={(e) => e.key === 'Enter' && handleManualEntry()}
             />
             <button onClick={handleManualEntry} className="btn btn-primary">
-              ✓ Mark Present
+               Mark Present
             </button>
           </div>
         )}
@@ -379,14 +379,14 @@ const QRScanner = () => {
       {/* Attendance List */}
       <div className="attendance-section card">
         <div className="attendance-header">
-          <h2>📋 Attendance List</h2>
+          <h2> Attendance List</h2>
           
           <div className="attendance-filters">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="🔍 Search by name or ticket ID"
+              placeholder=" Search by name or ticket ID"
               className="search-input"
             />
             
@@ -415,9 +415,9 @@ const QRScanner = () => {
                 <tr key={record._id} className={record.attendance ? 'present-row' : 'absent-row'}>
                   <td>
                     {record.attendance ? (
-                      <span className="status-badge present">✓ Present</span>
+                      <span className="status-badge present"> Present</span>
                     ) : (
-                      <span className="status-badge absent">✗ Absent</span>
+                      <span className="status-badge absent"> Absent</span>
                     )}
                   </td>
                   <td className="name-cell">
@@ -445,7 +445,7 @@ const QRScanner = () => {
                       }}
                       className="btn btn-sm btn-secondary"
                     >
-                      ⚙️ Override
+                       Override
                     </button>
                   </td>
                 </tr>

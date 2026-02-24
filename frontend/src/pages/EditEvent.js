@@ -180,13 +180,13 @@ const EditEvent = () => {
   return (
     <div className="container create-event-page">
       <div className="page-header">
-        <h1>✏️ Edit Event</h1>
+        <h1> Edit Event</h1>
         <p className="subtitle">Current Status: <strong>{event.status}</strong></p>
       </div>
 
       {/* Editing Rules Info */}
       <div className="alert alert-info" style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#e3f2fd', borderLeft: '4px solid #2196f3', borderRadius: '4px' }}>
-        <h4 style={{ margin: '0 0 10px 0' }}>📋 Editing Rules:</h4>
+        <h4 style={{ margin: '0 0 10px 0' }}> Editing Rules:</h4>
         {isDraft && (
           <p style={{ margin: 0 }}>
             <strong>Draft Mode:</strong> You can edit all fields and publish the event when ready.
@@ -196,12 +196,12 @@ const EditEvent = () => {
           <div>
             <p style={{ margin: '0 0 5px 0' }}><strong>Published Mode:</strong> Limited editing allowed:</p>
             <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
-              <li>✅ Description updates</li>
-              <li>✅ Extend registration deadline (cannot reduce)</li>
-              <li>✅ Increase registration limit (cannot reduce below {event.registrationCount} current registrations)</li>
-              <li>✅ Close registrations or mark as Ongoing</li>
-              <li>❌ Cannot edit: Name, dates, fees, form fields</li>
-              {hasRegistrations && <li>🔒 Custom form is locked after first registration</li>}
+              <li> Description updates</li>
+              <li> Extend registration deadline (cannot reduce)</li>
+              <li> Increase registration limit (cannot reduce below {event.registrationCount} current registrations)</li>
+              <li> Close registrations or mark as Ongoing</li>
+              <li> Cannot edit: Name, dates, fees, form fields</li>
+              {hasRegistrations && <li> Custom form is locked after first registration</li>}
             </ul>
           </div>
         )}
@@ -314,7 +314,7 @@ const EditEvent = () => {
                       className={`interest-tag ${formData.tags.includes(tag) ? 'selected' : ''}`}
                     >
                       {tag}
-                      {formData.tags.includes(tag) && <span className="check-icon">✓</span>}
+                      {formData.tags.includes(tag) && <span className="check-icon"></span>}
                     </button>
                   ))}
                 </div>
@@ -340,18 +340,18 @@ const EditEvent = () => {
           </div>
         )}
 
-        {/* ── Form Builder ── Only shown for Normal Draft events ── */}
+        {/*  Form Builder  Only shown for Normal Draft events  */}
         {isDraft && formData.eventType === 'Normal' && (
           <div className="form-builder-section" style={{ marginTop: '30px' }}>
             <h3 style={{ borderBottom: '2px solid #667eea', paddingBottom: '10px', marginBottom: '20px' }}>
-              📋 Custom Registration Form Builder
+               Custom Registration Form Builder
             </h3>
 
             {hasRegistrations ? (
               /* LOCKED — show read-only field list */
               <div style={{ background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '8px', padding: '15px', marginBottom: '20px' }}>
                 <p style={{ margin: '0 0 10px 0' }}>
-                  🔒 <strong>Form is locked</strong> — {event.registrationCount} registration(s) already received.
+                   <strong>Form is locked</strong> — {event.registrationCount} registration(s) already received.
                 </p>
                 {customFormFields.length === 0 ? (
                   <p style={{ color: '#666', margin: 0 }}>No custom fields were defined for this event.</p>
@@ -375,7 +375,7 @@ const EditEvent = () => {
               <>
                 {/* Add New Field */}
                 <div className="add-field-form" style={{ background: '#f8f9fa', padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #e0e0e0' }}>
-                  <h4 style={{ margin: '0 0 15px 0' }}>➕ Add New Field</h4>
+                  <h4 style={{ margin: '0 0 15px 0' }}> Add New Field</h4>
                   <div className="form-row">
                     <div className="form-group">
                       <label>Field Name *</label>
@@ -436,7 +436,7 @@ const EditEvent = () => {
                   </p>
                 ) : (
                   <div className="form-fields-preview">
-                    <h4>📝 Form Fields ({customFormFields.length})</h4>
+                    <h4> Form Fields ({customFormFields.length})</h4>
                     <div className="fields-list">
                       {customFormFields.map((field, index) => (
                         <div key={index} className="field-item" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', marginBottom: '8px' }}>
@@ -472,7 +472,7 @@ const EditEvent = () => {
                             onClick={() => removeFormField(index)}
                             style={{ background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '14px' }}
                             title="Remove field"
-                          >🗑️</button>
+                          ></button>
                         </div>
                       ))}
                     </div>

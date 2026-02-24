@@ -90,7 +90,7 @@ const BrowseEvents = () => {
       {trendingEvents.length > 0 && (
         <div className="trending-section card" style={{ marginBottom: '20px', padding: '20px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
           <h2 style={{ margin: '0 0 15px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            🔥 Trending Events <span style={{ fontSize: '14px', fontWeight: 'normal' }}>(Top 5 in last 24h)</span>
+             Trending Events <span style={{ fontSize: '14px', fontWeight: 'normal' }}>(Top 5 in last 24h)</span>
           </h2>
           <div style={{ display: 'flex', gap: '15px', overflowX: 'auto', paddingBottom: '10px' }}>
             {trendingEvents.map((event, index) => (
@@ -114,7 +114,7 @@ const BrowseEvents = () => {
                 <div style={{ fontSize: '24px', marginBottom: '5px' }}>#{index + 1}</div>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>{event.name}</h4>
                 <p style={{ margin: '0', fontSize: '13px', opacity: '0.9' }}>
-                  👁️ {event.viewCount || 0} views
+                   {event.viewCount || 0} views
                 </p>
               </Link>
             ))}
@@ -132,9 +132,9 @@ const BrowseEvents = () => {
               onChange={(e) => setSortBy(e.target.value)}
               style={{ padding: '8px 12px', borderRadius: '5px', border: '1px solid #ddd' }}
             >
-              <option value="recommended">🌟 Recommended for You</option>
-              <option value="followed">🎭 From Followed Clubs</option>
-              <option value="date">📅 By Date</option>
+              <option value="recommended"> Recommended for You</option>
+              <option value="followed"> From Followed Clubs</option>
+              <option value="date"> By Date</option>
             </select>
             <small style={{ color: '#666', marginLeft: '10px' }}>
               {sortBy === 'recommended' && '(Based on your interests and followed clubs)'}

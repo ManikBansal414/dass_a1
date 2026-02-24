@@ -44,7 +44,7 @@ const MerchandiseOrders = () => {
     setProcessing(true);
     try {
       await api.put(`/events/${eventId}/approve-payment/${order._id}`);
-      toast.success(`✅ Payment approved for ${order.participant.firstName}`);
+      toast.success(` Payment approved for ${order.participant.firstName}`);
       fetchOrders();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to approve payment');
@@ -61,7 +61,7 @@ const MerchandiseOrders = () => {
       await api.put(`/events/${eventId}/reject-payment/${selectedOrder._id}`, {
         reason: rejectionReason || 'Payment proof could not be verified'
       });
-      toast.success(`❌ Payment rejected for ${selectedOrder.participant.firstName}`);
+      toast.success(` Payment rejected for ${selectedOrder.participant.firstName}`);
       setShowRejectModal(false);
       setSelectedOrder(null);
       setRejectionReason('');
@@ -98,9 +98,9 @@ const MerchandiseOrders = () => {
     <div className="merchandise-orders-page">
       <div className="orders-header">
         <button onClick={() => navigate(-1)} className="btn btn-secondary">
-          ← Back
+           Back
         </button>
-        <h1>📦 Merchandise Orders - {event?.name}</h1>
+        <h1> Merchandise Orders - {event?.name}</h1>
       </div>
 
       {/* Stats Cards */}
@@ -129,13 +129,13 @@ const MerchandiseOrders = () => {
           All ({stats.total})
         </button>
         <button className={`filter-btn ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>
-          ⏳ Pending ({stats.pending})
+           Pending ({stats.pending})
         </button>
         <button className={`filter-btn ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>
-          ✅ Approved ({stats.approved})
+           Approved ({stats.approved})
         </button>
         <button className={`filter-btn ${filter === 'rejected' ? 'active' : ''}`} onClick={() => setFilter('rejected')}>
-          ❌ Rejected ({stats.rejected})
+           Rejected ({stats.rejected})
         </button>
       </div>
 
@@ -177,7 +177,7 @@ const MerchandiseOrders = () => {
                   <td>
                     {order.paymentProof ? (
                       <button onClick={() => viewProof(order)} className="btn btn-sm btn-secondary">
-                        🖼️ View
+                         View
                       </button>
                     ) : (
                       <span className="no-proof">No proof</span>
@@ -185,9 +185,9 @@ const MerchandiseOrders = () => {
                   </td>
                   <td>
                     <span className={`payment-status-badge ${order.paymentStatus}`}>
-                      {order.paymentStatus === 'completed' ? '✅ Approved' :
-                       order.paymentStatus === 'pending' ? '⏳ Pending' :
-                       order.paymentStatus === 'rejected' ? '❌ Rejected' :
+                      {order.paymentStatus === 'completed' ? ' Approved' :
+                       order.paymentStatus === 'pending' ? ' Pending' :
+                       order.paymentStatus === 'rejected' ? ' Rejected' :
                        order.paymentStatus}
                     </span>
                   </td>
@@ -206,20 +206,20 @@ const MerchandiseOrders = () => {
                           className="btn btn-sm btn-success"
                           disabled={processing}
                         >
-                          ✅ Approve
+                           Approve
                         </button>
                         <button
                           onClick={() => openRejectModal(order)}
                           className="btn btn-sm btn-danger"
                           disabled={processing}
                         >
-                          ❌ Reject
+                           Reject
                         </button>
                       </div>
                     )}
                     {order.paymentStatus === 'rejected' && order.rejectionReason && (
                       <span className="rejection-reason" title={order.rejectionReason}>
-                        📝 {order.rejectionReason.substring(0, 30)}...
+                         {order.rejectionReason.substring(0, 30)}...
                       </span>
                     )}
                   </td>
@@ -251,10 +251,10 @@ const MerchandiseOrders = () => {
               {selectedOrder.paymentStatus === 'pending' && (
                 <>
                   <button onClick={() => handleApprove(selectedOrder)} className="btn btn-success" disabled={processing}>
-                    ✅ Approve Payment
+                     Approve Payment
                   </button>
                   <button onClick={() => { setShowProofModal(false); openRejectModal(selectedOrder); }} className="btn btn-danger" disabled={processing}>
-                    ❌ Reject Payment
+                     Reject Payment
                   </button>
                 </>
               )}
@@ -289,7 +289,7 @@ const MerchandiseOrders = () => {
                 Cancel
               </button>
               <button onClick={handleReject} className="btn btn-danger" disabled={processing}>
-                {processing ? 'Processing...' : '❌ Confirm Rejection'}
+                {processing ? 'Processing...' : ' Confirm Rejection'}
               </button>
             </div>
           </div>

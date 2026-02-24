@@ -94,7 +94,7 @@ const OrganizerProfile = () => {
 
   return (
     <div className="container organizer-profile-page">
-      <h1>🎭 Organizer Profile</h1>
+      <h1> Organizer Profile</h1>
 
       {/* Profile Information */}
       <div className="profile-section card">
@@ -102,7 +102,7 @@ const OrganizerProfile = () => {
           <h2>Profile Information</h2>
           {!editing && (
             <button onClick={() => setEditing(true)} className="btn btn-primary">
-              ✏️ Edit Profile
+               Edit Profile
             </button>
           )}
         </div>
@@ -214,7 +214,7 @@ const OrganizerProfile = () => {
 
       {/* Discord Webhook */}
       <div className="profile-section card">
-        <h2>🎮 Discord Integration</h2>
+        <h2> Discord Integration</h2>
         <p className="section-description">
           Auto-post new events to your Discord server using a webhook
         </p>
@@ -229,7 +229,7 @@ const OrganizerProfile = () => {
             placeholder="https://discord.com/api/webhooks/..."
           />
           <small className="form-hint">
-            Get your webhook URL from Discord: Server Settings → Integrations → Webhooks
+            Get your webhook URL from Discord: Server Settings  Integrations  Webhooks
           </small>
         </div>
 
@@ -240,7 +240,7 @@ const OrganizerProfile = () => {
 
       {/* Password Reset Request */}
       <div className="profile-section card">
-        <h2>🔓 Password Reset Request</h2>
+        <h2> Password Reset Request</h2>
         <p className="section-description">
           Need to change your password? Submit a reset request to the admin.
           A new temporary password will be generated upon approval.
@@ -248,7 +248,7 @@ const OrganizerProfile = () => {
 
         {resetRequests.some(r => r.status === 'pending') ? (
           <div className="reset-pending-notice">
-            <p>⏳ You already have a pending password reset request. Please wait for admin review.</p>
+            <p> You already have a pending password reset request. Please wait for admin review.</p>
           </div>
         ) : (
           <form onSubmit={handleRequestPasswordReset}>
@@ -266,7 +266,7 @@ const OrganizerProfile = () => {
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={submittingReset}>
-              {submittingReset ? 'Submitting...' : '📨 Submit Reset Request'}
+              {submittingReset ? 'Submitting...' : ' Submit Reset Request'}
             </button>
           </form>
         )}
@@ -274,7 +274,7 @@ const OrganizerProfile = () => {
         {/* Reset Request History */}
         {resetRequests.length > 0 && (
           <div className="reset-history">
-            <h3>📋 Reset Request History</h3>
+            <h3> Reset Request History</h3>
             <table className="reset-table">
               <thead>
                 <tr>
@@ -293,9 +293,9 @@ const OrganizerProfile = () => {
                     <td style={{ maxWidth: '200px' }}>{request.reason}</td>
                     <td>
                       <span className={`status-badge ${request.status}`}>
-                        {request.status === 'pending' ? '⏳ Pending' :
-                         request.status === 'approved' ? '✅ Approved' :
-                         '❌ Rejected'}
+                        {request.status === 'pending' ? ' Pending' :
+                         request.status === 'approved' ? ' Approved' :
+                         ' Rejected'}
                       </span>
                     </td>
                     <td>{request.adminComments || '-'}</td>

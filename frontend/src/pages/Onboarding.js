@@ -100,7 +100,7 @@ const Onboarding = () => {
     <div className="onboarding-container">
       <div className="onboarding-card">
         <div className="onboarding-header">
-          <h1>Welcome to Felicity! 🎉</h1>
+          <h1>Welcome to Felicity! </h1>
           <p>Let's personalize your experience</p>
           <div className="progress-bar">
             <div className={`progress-step ${step >= 1 ? 'active' : ''}`}>
@@ -132,7 +132,7 @@ const Onboarding = () => {
                   onClick={() => handleInterestToggle(interest)}
                 >
                   {interest}
-                  {selectedInterests.includes(interest) && <span className="check-icon">✓</span>}
+                  {selectedInterests.includes(interest) && <span className="check-icon"></span>}
                 </button>
               ))}
             </div>
@@ -172,7 +172,7 @@ const Onboarding = () => {
                 className="btn btn-primary"
                 disabled={selectedInterests.length === 0}
               >
-                Next →
+                Next 
               </button>
             </div>
           </div>
@@ -205,7 +205,7 @@ const Onboarding = () => {
                         <span className="club-category">{club.category}</span>
                       </div>
                       {selectedClubs.includes(club._id) && (
-                        <span className="check-icon-large">✓</span>
+                        <span className="check-icon-large"></span>
                       )}
                     </div>
                     <p className="club-description">{club.description}</p>
@@ -225,7 +225,7 @@ const Onboarding = () => {
 
             <div className="onboarding-actions">
               <button onClick={handleBack} className="btn btn-secondary">
-                ← Back
+                 Back
               </button>
               <button onClick={handleSkip} className="btn btn-text">
                 Skip for now

@@ -99,7 +99,7 @@ const AdminDashboard = () => {
   };
 
   const handlePermanentDelete = async (id, name) => {
-    if (!window.confirm(`⚠️ WARNING: This will PERMANENTLY DELETE "${name}" and cannot be undone!\n\nAre you absolutely sure?`)) {
+    if (!window.confirm(` WARNING: This will PERMANENTLY DELETE "${name}" and cannot be undone!\n\nAre you absolutely sure?`)) {
       return;
     }
 
@@ -187,7 +187,7 @@ const AdminDashboard = () => {
               <p><strong>Login Email:</strong> {credentials.email}</p>
               <p><strong>Temporary Password:</strong> <span className="password">{credentials.password}</span></p>
             </div>
-            <p className="warning-text">⚠️ Share these credentials with the organizer. They should change the password after first login.</p>
+            <p className="warning-text"> Share these credentials with the organizer. They should change the password after first login.</p>
             <button onClick={() => setShowCredentials(false)} className="btn btn-primary">
               Close
             </button>
@@ -199,13 +199,13 @@ const AdminDashboard = () => {
       {showResetCredentials && resetCredentials && (
         <div className="modal-overlay" onClick={() => setShowResetCredentials(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>🔑 Password Reset Approved!</h2>
+            <h2> Password Reset Approved!</h2>
             <div className="credentials-box">
               <p><strong>Name:</strong> {resetCredentials.name}</p>
               <p><strong>Email:</strong> {resetCredentials.email}</p>
               <p><strong>New Temporary Password:</strong> <span className="password">{resetCredentials.password}</span></p>
             </div>
-            <p className="warning-text">⚠️ Share this new password with the organizer. They should change it after logging in.</p>
+            <p className="warning-text"> Share this new password with the organizer. They should change it after logging in.</p>
             <button onClick={() => setShowResetCredentials(false)} className="btn btn-primary">
               Close
             </button>
@@ -243,7 +243,7 @@ const AdminDashboard = () => {
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="btn btn-primary"
           >
-            {showCreateForm ? '❌ Cancel' : '➕ Add New Organizer'}
+            {showCreateForm ? ' Cancel' : ' Add New Organizer'}
           </button>
         </div>
       </div>
@@ -368,7 +368,7 @@ const AdminDashboard = () => {
 
       {/* Password Reset Requests */}
       <div className="dashboard-section card">
-        <h2>🔑 Password Reset Requests {resetStats.pending > 0 && <span className="pending-badge">{resetStats.pending} pending</span>}</h2>
+        <h2> Password Reset Requests {resetStats.pending > 0 && <span className="pending-badge">{resetStats.pending} pending</span>}</h2>
         
         {resetRequests.length > 0 ? (
           <div className="organizers-table">
@@ -391,9 +391,9 @@ const AdminDashboard = () => {
                     <td style={{ maxWidth: '250px' }}>{request.reason}</td>
                     <td>
                       <span className={`status-badge ${request.status}`}>
-                        {request.status === 'pending' ? '⏳ Pending' :
-                         request.status === 'approved' ? '✅ Approved' :
-                         '❌ Rejected'}
+                        {request.status === 'pending' ? ' Pending' :
+                         request.status === 'approved' ? ' Approved' :
+                         ' Rejected'}
                       </span>
                     </td>
                     <td>{new Date(request.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
@@ -404,13 +404,13 @@ const AdminDashboard = () => {
                             onClick={() => handleApproveResetRequest(request._id)}
                             className="btn btn-success btn-sm"
                           >
-                            ✅ Approve
+                             Approve
                           </button>
                           <button
                             onClick={() => handleRejectResetRequest(request._id)}
                             className="btn btn-danger btn-sm"
                           >
-                            ❌ Reject
+                             Reject
                           </button>
                         </div>
                       )}
@@ -464,14 +464,14 @@ const AdminDashboard = () => {
                           onClick={() => handlePublishEvent(event._id)}
                           className="btn btn-success btn-sm"
                         >
-                          ✓ Publish
+                           Publish
                         </button>
                       )}
                       <button
                         onClick={() => handleDeleteEvent(event._id, event.name)}
                         className="btn btn-danger btn-sm"
                       >
-                        🗑️ Delete
+                         Delete
                       </button>
                     </div>
                   </td>

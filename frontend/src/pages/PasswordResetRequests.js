@@ -66,19 +66,19 @@ const PasswordResetRequests = () => {
 
   return (
     <div className="container">
-      <h1>🔑 Password Reset Requests</h1>
+      <h1> Password Reset Requests</h1>
 
       {/* Reset Credentials Modal */}
       {showResetCredentials && resetCredentials && (
         <div className="modal-overlay" onClick={() => setShowResetCredentials(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>🔑 Password Reset Approved!</h2>
+            <h2> Password Reset Approved!</h2>
             <div className="credentials-box">
               <p><strong>Name:</strong> {resetCredentials.name}</p>
               <p><strong>Email:</strong> {resetCredentials.email}</p>
               <p><strong>New Temporary Password:</strong> <span className="password">{resetCredentials.password}</span></p>
             </div>
-            <p className="warning-text">⚠️ Share this new password with the organizer. They should change it after logging in.</p>
+            <p className="warning-text"> Share this new password with the organizer. They should change it after logging in.</p>
             <button onClick={() => setShowResetCredentials(false)} className="btn btn-primary">
               Close
             </button>
@@ -134,9 +134,9 @@ const PasswordResetRequests = () => {
                     <td style={{ maxWidth: '250px' }}>{request.reason}</td>
                     <td>
                       <span className={`status-badge ${request.status}`}>
-                        {request.status === 'pending' ? '⏳ Pending' :
-                         request.status === 'approved' ? '✅ Approved' :
-                         '❌ Rejected'}
+                        {request.status === 'pending' ? ' Pending' :
+                         request.status === 'approved' ? ' Approved' :
+                         ' Rejected'}
                       </span>
                     </td>
                     <td>{new Date(request.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
@@ -147,13 +147,13 @@ const PasswordResetRequests = () => {
                             onClick={() => handleApproveResetRequest(request._id)}
                             className="btn btn-success btn-sm"
                           >
-                            ✅ Approve
+                             Approve
                           </button>
                           <button
                             onClick={() => handleRejectResetRequest(request._id)}
                             className="btn btn-danger btn-sm"
                           >
-                            ❌ Reject
+                             Reject
                           </button>
                         </div>
                       ) : (
