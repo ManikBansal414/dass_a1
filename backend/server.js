@@ -66,21 +66,32 @@ mongoose.connect(process.env.MONGODB_URI)
 // Initialize admin account
 async function initializeAdmin() {
   const Admin = require('./models/Admin');
-  
+  const bcrypt = require('bcrypt');
+
   try {
-    const adminExists = await Admin.findOne({ email: process.env.ADMIN_EMAIL });
-    
+    const email = (process.env.ADMIN_EMAIL || 'admin@felicity.com').toLowerCase().trim();
+    const plainPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+    const adminExists = await Admin.findOne({ email });
+
     if (!adminExists) {
-      await Admin.create({
-        email: process.env.ADMIN_EMAIL || 'admin@felicity.com',
-        password: process.env.ADMIN_PASSWORD || 'admin123'
+      const hashedPassword = await bcrypt.hash(plainPassword, 10);
+      await Admin.collection.insertOne({
+        name: 'Admin',
+        email,
+        password: hashedPassword,
+        role: 'admin',
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       console.log(' Admin account created');
-      console.log(`  Email: ${process.env.ADMIN_EMAIL || 'admin@felicity.com'}`);
-      console.log(`  Password: ${process.env.ADMIN_PASSWORD || 'admin123'}`);
     }
+    // already exists — silently skip
   } catch (error) {
-    console.error('Admin initialization error:', error);
+    // Only log truly unexpected errors, not duplicate key
+    if (error.code !== 11000) {
+      console.error('Admin initialization error:', error.message);
+    }
   }
 }
 
