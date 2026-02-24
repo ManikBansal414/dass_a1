@@ -225,7 +225,7 @@ exports.reactToMessage = async (req, res) => {
     const { eventId, id } = req.params;
     const { emoji } = req.body;
 
-    const validEmojis = ['👍', '❤️', '🎉', '🤔', '👏'];
+    const validEmojis = ['', '', '', '', ''];
     if (!validEmojis.includes(emoji)) {
       return res.status(400).json({
         success: false,

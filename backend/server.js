@@ -53,7 +53,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
-  console.log('✓ MongoDB connected successfully');
+  console.log(' MongoDB connected successfully');
   // Initialize admin account if not exists
   initializeAdmin();
 })
@@ -75,7 +75,7 @@ async function initializeAdmin() {
         email: process.env.ADMIN_EMAIL || 'admin@felicity.com',
         password: process.env.ADMIN_PASSWORD || 'admin123'
       });
-      console.log('✓ Admin account created');
+      console.log(' Admin account created');
       console.log(`  Email: ${process.env.ADMIN_EMAIL || 'admin@felicity.com'}`);
       console.log(`  Password: ${process.env.ADMIN_PASSWORD || 'admin123'}`);
     }
@@ -138,9 +138,9 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`\n🚀 Server running on port ${PORT}`);
-  console.log(`📍 API URL: http://localhost:${PORT}`);
-  console.log(`📚 Environment: ${process.env.NODE_ENV || 'development'}\n`);
+  console.log(`\n Server running on port ${PORT}`);
+  console.log(` API URL: http://localhost:${PORT}`);
+  console.log(` Environment: ${process.env.NODE_ENV || 'development'}\n`);
 });
 
 // Handle unhandled promise rejections

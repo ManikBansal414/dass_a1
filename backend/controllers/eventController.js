@@ -396,7 +396,7 @@ exports.updateEvent = async (req, res) => {
 // @access  Private (Participant only)
 exports.registerForEvent = async (req, res) => {
   try {
-    console.log('📝 Registration attempt:', {
+    console.log(' Registration attempt:', {
       eventId: req.params.id,
       userId: req.user._id,
       eventType: req.body.eventType,
@@ -460,7 +460,7 @@ exports.registerForEvent = async (req, res) => {
           });
         }
 
-        console.log(`📦 Current stock: ${currentStock}`);
+        console.log(` Current stock: ${currentStock}`);
       }
     }
 
@@ -490,7 +490,7 @@ exports.registerForEvent = async (req, res) => {
     const isMerchandiseWithApproval = event.eventType === 'Merchandise' && req.body.paymentProof;
     const paymentStatus = isMerchandiseWithApproval ? 'pending' : 'completed';
 
-    console.log('💳 Payment status:', {
+    console.log(' Payment status:', {
       eventType: event.eventType,
       hasPaymentProof: !!req.body.paymentProof,
       paymentStatus
@@ -500,7 +500,7 @@ exports.registerForEvent = async (req, res) => {
     // If payment approval is required, stock will be decremented upon approval
     if (event.eventType === 'Merchandise' && !isMerchandiseWithApproval && event.merchandiseDetails && event.merchandiseDetails.stockQuantity !== undefined) {
       event.merchandiseDetails.stockQuantity -= 1;
-      console.log(`📦 Stock decremented immediately (no approval needed). New stock: ${event.merchandiseDetails.stockQuantity}`);
+      console.log(` Stock decremented immediately (no approval needed). New stock: ${event.merchandiseDetails.stockQuantity}`);
     }
 
     // Add participant to event
@@ -524,7 +524,7 @@ exports.registerForEvent = async (req, res) => {
       event.revenue += event.registrationFee;
     }
     await event.save();
-    console.log('✅ Event saved with participant');
+    console.log(' Event saved with participant');
 
     // Add event to participant's registered events
     participant.registeredEvents.push({
@@ -536,24 +536,24 @@ exports.registerForEvent = async (req, res) => {
       paymentStatus: paymentStatus // 'pending' or 'completed'
     });
     await participant.save();
-    console.log('✅ Participant saved with event');
+    console.log(' Participant saved with event');
 
     // Send confirmation email asynchronously (don't block response)
-    console.log(`📧 Preparing to send email to ${participant.email}...`);
+    console.log(` Preparing to send email to ${participant.email}...`);
     
     const sendEmailAsync = async () => {
       try {
         if (event.eventType === 'Normal') {
           // For Normal Events: Send ticket email with QR code immediately
-          console.log('📨 Sending Normal event ticket email...');
+          console.log(' Sending Normal event ticket email...');
           await sendTicketEmail(participant.email, event, { ticketId, qrCode });
         } else if (event.eventType === 'Merchandise' && isMerchandiseWithApproval) {
           // For Merchandise Events with payment proof: Send pending email
-          console.log('📨 Sending Merchandise pending email...');
+          console.log(' Sending Merchandise pending email...');
           await sendMerchandisePendingEmail(participant.email, event, { orderId: ticketId });
         } else if (event.eventType === 'Merchandise') {
           // For Merchandise Events (Basic Flow): Send order confirmation with QR code
-          console.log('📨 Sending Merchandise confirmation email...');
+          console.log(' Sending Merchandise confirmation email...');
           const orderDetails = {
             size: req.body.size,
             color: req.body.color,
@@ -561,9 +561,9 @@ exports.registerForEvent = async (req, res) => {
           };
           await sendMerchandiseEmail(participant.email, event, { ticketId, qrCode }, orderDetails);
         }
-        console.log(`✅ Email sent successfully to ${participant.email}`);
+        console.log(` Email sent successfully to ${participant.email}`);
       } catch (emailError) {
-        console.error(`❌ Email sending failed for ${participant.email}:`, emailError.message);
+        console.error(` Email sending failed for ${participant.email}:`, emailError.message);
         console.error('Full error:', emailError);
       }
     };
@@ -571,7 +571,7 @@ exports.registerForEvent = async (req, res) => {
     // Send email in background without blocking the response
     sendEmailAsync().catch(err => console.error('Background email error:', err));
 
-    console.log('✅ Sending success response to client');
+    console.log(' Sending success response to client');
     res.status(200).json({
       success: true,
       message: isMerchandiseWithApproval 
@@ -584,7 +584,7 @@ exports.registerForEvent = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('❌ Register for event error:', error);
+    console.error(' Register for event error:', error);
     console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
@@ -1070,7 +1070,7 @@ exports.approvePayment = async (req, res) => {
     // Decrement stock on approval (as per requirement)
     if (event.merchandiseDetails && event.merchandiseDetails.stockQuantity !== undefined) {
       event.merchandiseDetails.stockQuantity -= 1;
-      console.log(`📦 Stock decremented on approval. New stock: ${event.merchandiseDetails.stockQuantity}`);
+      console.log(` Stock decremented on approval. New stock: ${event.merchandiseDetails.stockQuantity}`);
     }
 
     // Add revenue

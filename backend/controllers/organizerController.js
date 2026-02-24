@@ -27,7 +27,7 @@ exports.getDashboard = async (req, res) => {
       return sum + e.participants.filter(p => p.attendance).length;
     }, 0);
 
-    console.log('📊 Dashboard Analytics:', {
+    console.log(' Dashboard Analytics:', {
       totalEvents: eventsWithComputedStatus.length,
       completedEvents: completedEvents.length,
       totalRevenue,

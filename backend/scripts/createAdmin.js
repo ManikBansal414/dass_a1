@@ -39,7 +39,7 @@ async function createAdmin() {
   try {
     // Connect to MongoDB
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✓ Connected to MongoDB');
+    console.log(' Connected to MongoDB');
 
     // Get admin details
     const name = await askQuestion('Admin Name (default: Admin): ') || 'Admin';
@@ -49,12 +49,12 @@ async function createAdmin() {
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
-      console.log('\n❌ Admin with this email already exists!');
+      console.log('\n Admin with this email already exists!');
       const overwrite = await askQuestion('Do you want to update the password? (yes/no): ');
       if (overwrite.toLowerCase() === 'yes' || overwrite.toLowerCase() === 'y') {
         existingAdmin.password = await bcrypt.hash(password, 10);
         await existingAdmin.save();
-        console.log('\n✓ Admin password updated successfully!');
+        console.log('\n Admin password updated successfully!');
         console.log(`  Email: ${email}`);
         console.log(`  Password: ${password}`);
       }
@@ -69,14 +69,14 @@ async function createAdmin() {
         password: hashedPassword
       });
 
-      console.log('\n✓ Admin account created successfully!');
+      console.log('\n Admin account created successfully!');
       console.log(`  Name: ${admin.name}`);
       console.log(`  Email: ${admin.email}`);
       console.log(`  Password: ${password}`);
     }
 
   } catch (error) {
-    console.error('\n❌ Error creating admin:', error.message);
+    console.error('\n Error creating admin:', error.message);
   } finally {
     await mongoose.connection.close();
     rl.close();
@@ -92,8 +92,8 @@ function askQuestion(question) {
 }
 
 // Run the script
-console.log('═══════════════════════════════════════');
+console.log('');
 console.log('  Felicity Admin Account Creator');
-console.log('═══════════════════════════════════════\n');
+console.log('\n');
 
 createAdmin();

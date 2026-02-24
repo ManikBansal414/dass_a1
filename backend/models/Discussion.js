@@ -45,7 +45,7 @@ const discussionSchema = new mongoose.Schema({
     },
     emoji: {
       type: String,
-      enum: ['👍', '❤️', '🎉', '🤔', '👏']
+      enum: ['', '', '', '', '']
     }
   }],
   deleted: {

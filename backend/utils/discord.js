@@ -10,7 +10,7 @@ const axios = require('axios');
  */
 exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
   if (!webhookUrl) {
-    console.log('⚠️  No Discord webhook configured for organizer:', organizer.name);
+    console.log('  No Discord webhook configured for organizer:', organizer.name);
     return false;
   }
 
@@ -35,34 +35,34 @@ exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
     });
 
     const embed = {
-      title: `🎉 ${event.name}`,
+      title: ` ${event.name}`,
       description: event.description.length > 300
         ? event.description.substring(0, 300) + '...'
         : event.description,
       color: event.eventType === 'Merchandise' ? 0xf5576c : 0x667eea,
       fields: [
         {
-          name: '📅 Date',
+          name: ' Date',
           value: `${startDate} at ${startTime}`,
           inline: true
         },
         {
-          name: '🎫 Type',
+          name: ' Type',
           value: event.eventType,
           inline: true
         },
         {
-          name: '💰 Fee',
+          name: ' Fee',
           value: event.registrationFee > 0 ? `₹${event.registrationFee}` : 'Free',
           inline: true
         },
         {
-          name: '👥 Eligibility',
+          name: ' Eligibility',
           value: event.eligibility || 'All',
           inline: true
         },
         {
-          name: '⏰ Registration Deadline',
+          name: ' Registration Deadline',
           value: deadline,
           inline: true
         }
@@ -76,7 +76,7 @@ exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
     // Add tags if present
     if (event.tags && event.tags.length > 0) {
       embed.fields.push({
-        name: '🏷️ Tags',
+        name: ' Tags',
         value: event.tags.join(', '),
         inline: false
       });
@@ -85,7 +85,7 @@ exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
     // Add registration limit if set
     if (event.registrationLimit) {
       embed.fields.push({
-        name: '📊 Capacity',
+        name: ' Capacity',
         value: `${event.registrationLimit} spots`,
         inline: true
       });
@@ -105,7 +105,7 @@ exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
       }
       if (merchInfo.length > 0) {
         embed.fields.push({
-          name: '🛍️ Merchandise Details',
+          name: ' Merchandise Details',
           value: merchInfo.join('\n'),
           inline: false
         });
@@ -113,7 +113,7 @@ exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
     }
 
     const payload = {
-      content: `📢 **New Event Published!** Register now!`,
+      content: ` **New Event Published!** Register now!`,
       embeds: [embed]
     };
 
@@ -121,10 +121,10 @@ exports.sendDiscordNotification = async (webhookUrl, event, organizer) => {
       headers: { 'Content-Type': 'application/json' }
     });
 
-    console.log(`✅ Discord notification sent for event: ${event.name}`);
+    console.log(` Discord notification sent for event: ${event.name}`);
     return true;
   } catch (error) {
-    console.error('❌ Discord webhook error:', error.response?.data || error.message);
+    console.error(' Discord webhook error:', error.response?.data || error.message);
     return false;
   }
 };

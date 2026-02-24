@@ -104,7 +104,7 @@ exports.removeOrganizer = async (req, res) => {
     if (permanent === 'true') {
       // CASCADE DELETE: Delete all events created by this organizer
       await Event.deleteMany({ organizer: req.params.id });
-      console.log(`🗑️ Cascade deleted all events for organizer ${req.params.id}`);
+      console.log(` Cascade deleted all events for organizer ${req.params.id}`);
       
       await Organizer.findByIdAndDelete(req.params.id);
       return res.status(200).json({

@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const createTransporter = () => {
   // Check if email configuration exists
   if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER) {
-    console.log('⚠️  Email configuration not found. Emails will be logged to console only.');
+    console.log('  Email configuration not found. Emails will be logged to console only.');
     return null;
   }
 
@@ -24,7 +24,7 @@ const sendEmail = async (mailOptions) => {
   const transporter = createTransporter();
   
   if (!transporter) {
-    console.log('\n📧 EMAIL (Console Mode - No SMTP configured):');
+    console.log('\n EMAIL (Console Mode - No SMTP configured):');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log(`To: ${mailOptions.to}`);
     console.log(`Subject: ${mailOptions.subject}`);
@@ -35,10 +35,10 @@ const sendEmail = async (mailOptions) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Email sent to ${mailOptions.to}: ${mailOptions.subject}`);
+    console.log(` Email sent to ${mailOptions.to}: ${mailOptions.subject}`);
     return true;
   } catch (error) {
-    console.error('❌ Email send error:', error.message);
+    console.error(' Email send error:', error.message);
     return false;
   }
 };
@@ -254,20 +254,20 @@ exports.sendMerchandisePendingEmail = async (participantEmail, eventDetails, ord
             <p>Your order has been received and is currently under review.</p>
             
             <div class="status-box">
-              <div class="status">🔍 Payment Verification in Progress</div>
+              <div class="status"> Payment Verification in Progress</div>
             </div>
 
             <div class="details">
-              <h3>📋 Order Details</h3>
+              <h3> Order Details</h3>
               <ul style="list-style: none; padding: 0;">
-                <li>📦 <strong>Item:</strong> ${eventDetails.name}</li>
-                <li>🆔 <strong>Order ID:</strong> ${orderData.orderId}</li>
-                <li>💰 <strong>Amount:</strong> ₹${eventDetails.registrationFee || 0}</li>
+                <li> <strong>Item:</strong> ${eventDetails.name}</li>
+                <li> <strong>Order ID:</strong> ${orderData.orderId}</li>
+                <li> <strong>Amount:</strong> ₹${eventDetails.registrationFee || 0}</li>
               </ul>
             </div>
 
             <div class="info-note">
-              <strong>📌 What's Next?</strong><br>
+              <strong> What's Next?</strong><br>
               • Our team is reviewing your payment proof<br>
               • You'll receive a confirmation email once approved<br>
               • Expected review time: 24-48 hours<br>
@@ -321,13 +321,13 @@ exports.sendMerchandiseApprovalEmail = async (participantEmail, eventDetails, ti
       <body>
         <div class="container">
           <div class="header">
-            <h1>✅ Payment Approved!</h1>
+            <h1> Payment Approved!</h1>
           </div>
           <div class="content">
             <p>Great news! Your payment has been verified and approved.</p>
             
             <div class="approval-box">
-              <div style="font-size: 48px;">🎉</div>
+              <div style="font-size: 48px;"></div>
               <h2 style="color: #00b894; margin: 10px 0;">Order Confirmed</h2>
               <p style="margin: 5px 0;">Your Ticket ID</p>
               <div class="ticket-id">${ticketData.ticketId}</div>
@@ -342,18 +342,18 @@ exports.sendMerchandiseApprovalEmail = async (participantEmail, eventDetails, ti
             ` : ''}
 
             <div class="details">
-              <h3>📦 Confirmed Order</h3>
+              <h3> Confirmed Order</h3>
               <ul style="list-style: none; padding: 0;">
-                <li>🛍️ <strong>Item:</strong> ${eventDetails.name}</li>
-                ${orderDetails.size ? `<li>📏 <strong>Size:</strong> ${orderDetails.size}</li>` : ''}
-                ${orderDetails.color ? `<li>🎨 <strong>Color:</strong> ${orderDetails.color}</li>` : ''}
-                <li>💰 <strong>Amount Paid:</strong> ₹${eventDetails.registrationFee || 0}</li>
-                <li>✅ <strong>Status:</strong> Confirmed</li>
+                <li> <strong>Item:</strong> ${eventDetails.name}</li>
+                ${orderDetails.size ? `<li> <strong>Size:</strong> ${orderDetails.size}</li>` : ''}
+                ${orderDetails.color ? `<li> <strong>Color:</strong> ${orderDetails.color}</li>` : ''}
+                <li> <strong>Amount Paid:</strong> ₹${eventDetails.registrationFee || 0}</li>
+                <li> <strong>Status:</strong> Confirmed</li>
               </ul>
             </div>
 
             <div class="success-note">
-              <strong>🎫 Your QR Code is Ready!</strong><br>
+              <strong> Your QR Code is Ready!</strong><br>
               • Login to your dashboard to view your QR code<br>
               • Download and save it for collection<br>
               • Present the QR code when collecting your order
@@ -377,7 +377,7 @@ exports.sendMerchandiseRejectionEmail = async (participantEmail, eventDetails, o
   const mailOptions = {
     from: process.env.EMAIL_USER || 'noreply@felicity.com',
     to: participantEmail,
-    subject: `❌ Payment Declined - ${eventDetails.name}`,
+    subject: ` Payment Declined - ${eventDetails.name}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -395,7 +395,7 @@ exports.sendMerchandiseRejectionEmail = async (participantEmail, eventDetails, o
       <body>
         <div class="container">
           <div class="header">
-            <h1>❌ Payment Declined</h1>
+            <h1> Payment Declined</h1>
           </div>
           <div class="content">
             <p>We're sorry, but your payment could not be verified.</p>
@@ -406,16 +406,16 @@ exports.sendMerchandiseRejectionEmail = async (participantEmail, eventDetails, o
             </div>
 
             <div class="warning-note">
-              <strong>❗ Reason for Decline:</strong><br>
+              <strong> Reason for Decline:</strong><br>
               ${reason || 'Payment proof could not be verified. Please check the uploaded document.'}
             </div>
 
             <div class="details">
-              <h3>📋 Order Details</h3>
+              <h3> Order Details</h3>
               <ul style="list-style: none; padding: 0;">
-                <li>📦 <strong>Item:</strong> ${eventDetails.name}</li>
-                <li>💰 <strong>Amount:</strong> ₹${eventDetails.registrationFee || 0}</li>
-                <li>🚫 <strong>Status:</strong> Declined</li>
+                <li> <strong>Item:</strong> ${eventDetails.name}</li>
+                <li> <strong>Amount:</strong> ₹${eventDetails.registrationFee || 0}</li>
+                <li> <strong>Status:</strong> Declined</li>
               </ul>
             </div>
 

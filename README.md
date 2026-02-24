@@ -31,9 +31,17 @@ Organizer accounts are created by the Admin from the Admin Dashboard.
 
 ## Advanced Features Implemented
 
+### Feature Selection Justification
+
+The features were selected to maximise marks while keeping scope realistic for a solo project on a free-tier deployment. Tier A features (16 marks total) were prioritised first because they carry the highest weight and both fit naturally into the event registration flow already being built. Tier B features (12 marks) were chosen next: the discussion forum adds genuine value to participants and required no external services, while the password reset workflow is a mandatory operational concern for any admin-managed system. The Tier C calendar integration (2 marks) was added last as it is purely client-side and required no backend work.
+
+No Tier A1 (Payment Gateway) was implemented because integrating a real payment gateway (Razorpay/Stripe) on a free-tier deployment without a verified business account introduces compliance and test-key limitations that would make end-to-end demonstration unreliable during evaluation.
+
+---
+
 ### Tier A — Core Advanced Features
 
-#### A2: Merchandise Payment Approval Workflow [8 Marks] ✅
+#### A2: Merchandise Payment Approval Workflow [8 Marks]
 
 **What is implemented:**
 - Participants place a merchandise order and upload a payment proof image
@@ -58,7 +66,7 @@ Organizer accounts are created by the Admin from the Admin Dashboard.
 
 ---
 
-#### A3: QR Scanner & Attendance Tracking [8 Marks] ✅
+#### A3: QR Scanner & Attendance Tracking [8 Marks]
 
 **What is implemented:**
 - Organizers open a dedicated **QR Scanner** page per event
@@ -84,7 +92,7 @@ Organizer accounts are created by the Admin from the Admin Dashboard.
 
 ### Tier B — Intermediate Features
 
-#### B1: Real-Time Discussion Forum [6 Marks] ✅
+#### B1: Real-Time Discussion Forum [6 Marks]
 
 **What is implemented:**
 - Per-event discussion forum on the **Event Details** page, visible only to registered participants and the organizer
@@ -107,7 +115,7 @@ Organizer accounts are created by the Admin from the Admin Dashboard.
 
 ---
 
-#### B2: Organizer Password Reset Workflow [6 Marks] ✅
+#### B2: Organizer Password Reset Workflow [6 Marks]
 
 **What is implemented:**
 - Organizers submit a **password reset request** from their Profile page with a reason (minimum 10 characters)
@@ -133,7 +141,7 @@ Organizer accounts are created by the Admin from the Admin Dashboard.
 
 ### Tier C — Enhancement Features
 
-#### C: Add to Calendar Integration [2 Marks] ✅
+#### C: Add to Calendar Integration [2 Marks]
 
 **What is implemented:**
 - On the Event Details page, registered participants see three calendar export options:
@@ -155,31 +163,40 @@ Organizer accounts are created by the Admin from the Admin Dashboard.
 
 ## Libraries & Frameworks
 
+### UI Approach — Plain CSS (No UI Framework)
+
+No CSS framework (Material-UI, Tailwind, Bootstrap, etc.) was used. All styling is hand-written CSS per component. This was a deliberate choice: the assignment evaluates full-stack development skill, and writing CSS from scratch demonstrates layout and design understanding rather than framework configuration. It also eliminates a large dependency that would add bundle size and build complexity on a free-tier deployment. Each page has its own `.css` file co-located with the component.
+
+---
+
 ### Backend
 
-| Library | Justification |
-|---|---|
-| **express** | Minimal Node.js web framework. Chosen for its simplicity, middleware ecosystem, and clean routing API. |
-| **mongoose** | MongoDB ODM providing schema validation, middleware hooks, and a clean query API. |
-| **jsonwebtoken** | Stateless JWT-based authentication. No server-side sessions needed — works cleanly with a React SPA. |
-| **bcrypt** | Password hashing with salt rounds. Purposely slow algorithm to resist brute-force attacks. |
-| **nodemailer** | Sends transactional emails (ticket confirmations, password resets, approvals) via Gmail SMTP. |
-| **qrcode** | Generates QR code PNG images for event tickets, called server-side at registration/approval time. |
-| **axios** | HTTP client used to POST to Discord webhooks from the backend. |
-| **cors** | Configures Cross-Origin Resource Sharing so the React frontend can call the API. |
-| **dotenv** | Loads environment variables from `.env` — keeps secrets out of source code. |
-| **express-validator** | Request body validation middleware — validates inputs before they reach controllers. |
-| **nodemon** | Auto-restarts backend on file changes during development. |
+| Library | Version | Justification |
+|---|---|---|
+| **express** | ^4.18 | Minimal, unopinionated Node.js web framework. Chosen for its mature middleware ecosystem, simple routing API, and widespread industry adoption. |
+| **mongoose** | ^8.0 | MongoDB ODM providing schema definitions, built-in validation, middleware hooks (`pre`/`post` save), and a clean async query API. Eliminates raw MongoDB driver boilerplate. |
+| **jsonwebtoken** | ^9.0 | Stateless JWT-based authentication. Tokens are signed with a server secret and verified on every protected request. No server-side session storage needed — works cleanly across a decoupled React SPA and REST API. |
+| **bcrypt** | ^5.1 | Industry-standard password hashing using the bcrypt algorithm with configurable salt rounds. Deliberately slow to resist brute-force and rainbow-table attacks. |
+| **nodemailer** | ^6.9 | Sends transactional emails (ticket confirmations, merchandise approval/rejection, password resets) via Gmail SMTP. Chosen over third-party email APIs (SendGrid, Mailgun) to avoid requiring an API key sign-up — works with a standard Gmail app password. |
+| **qrcode** | ^1.5 | Generates QR code PNG images server-side as base64 strings. Used to produce unique scannable tickets at registration/payment approval time. Server-side generation ensures the QR is attached to the email before the response is sent. |
+| **axios** | ^1.13 | HTTP client used in the backend to POST event announcements to Discord webhooks. Chosen over Node's native `fetch` for its cleaner error handling and response structure. |
+| **cors** | ^2.8 | Express middleware that sets the `Access-Control-Allow-Origin` header. Required because the React frontend (port 3000 / Render subdomain) makes requests to a different origin than the API. |
+| **dotenv** | ^16.3 | Loads environment variables from a `.env` file into `process.env`. Keeps secrets (DB URI, JWT secret, email credentials) out of source code. |
+| **express-validator** | ^7.0 | Declarative request body validation middleware. Validates and sanitises inputs before they reach controller logic, returning structured error arrays on failure. |
+| **concurrently** | ^8.2 | Dev-only utility to run both the backend (`nodemon`) and frontend (`react-scripts start`) processes from a single terminal command (`npm run dev:all`). |
+| **nodemon** | ^3.0 | Dev-only process manager that watches backend files and automatically restarts the Node server on changes. Eliminates the need to manually restart during development. |
 
 ### Frontend
 
-| Library | Justification |
-|---|---|
-| **react** | Component-based UI library with hooks API. Industry standard for SPAs. |
-| **react-router-dom** | Client-side routing. Supports protected routes, URL params, and navigation without full-page reloads. |
-| **axios** | HTTP client with interceptor support — automatically attaches JWT token to every request and handles 401 globally. |
-| **react-toastify** | Non-blocking toast notifications for async feedback (success, errors, registration confirmation). |
-| **jsqr** | Pure JavaScript QR code decoder. Used for both camera-frame and file-upload QR scanning. Chosen over `react-qr-reader` to avoid npm peer dependency conflicts with React 18. |
+| Library | Version | Justification |
+|---|---|---|
+| **react** | ^18.2 | Component-based UI library with the Hooks API (`useState`, `useEffect`, `useContext`). Chosen as the industry standard for building SPAs with reusable, stateful UI components. |
+| **react-dom** | ^18.2 | Required peer package for React — provides the `ReactDOM.createRoot` API used to mount the React tree into the HTML document. |
+| **react-scripts** | 5.0.1 | Create React App (CRA) build toolchain. Provides zero-config Webpack + Babel setup, environment variable injection (`REACT_APP_*`), and a production build command. Chosen over Vite/manual Webpack for its stability and straightforward Render deployment support. |
+| **react-router-dom** | ^6.20 | Declarative client-side routing. Provides `<BrowserRouter>`, `<Routes>`, `<Route>`, and `useNavigate`/`useParams` hooks. Used for protected routes (via a `PrivateRoute` wrapper) and URL-param-based navigation between pages. |
+| **axios** | ^1.6 | HTTP client with request/response interceptor support. A single Axios instance in `utils/api.js` automatically attaches the JWT `Authorization` header to every request and globally handles 401 responses (token expiry) by redirecting to login. |
+| **react-toastify** | ^9.1 | Non-blocking toast notification library. Provides success/error/warning notifications for all async operations (registration, approval, scan results) without interrupting the user's workflow with alert dialogs. |
+| **jsqr** | ^1.4 | Pure JavaScript QR code decoder that works on raw pixel data from a `<canvas>` element. Used for both live camera scanning (frame-by-frame decode at 100ms intervals) and file upload scanning (decode from a static image). Chosen over `react-qr-reader` which has unresolved peer dependency conflicts with React 18. |
 
 ---
 
@@ -234,7 +251,8 @@ dass_a1/
 
 ### Prerequisites
 - Node.js >= 18
-- MongoDB running locally (`mongod`) or a MongoDB Atlas URI
+- npm >= 9
+- MongoDB running locally (`mongod`) **or** a MongoDB Atlas connection string
 
 ### 1. Clone
 ```bash
@@ -244,25 +262,33 @@ cd dass_a1
 
 ### 2. Install dependencies
 ```bash
+# Backend
 npm install
+
+# Frontend
 cd frontend && npm install && cd ..
 ```
 
 ### 3. Configure environment
 
-**`backend/.env`**
+Create `backend/.env`:
+```bash
+touch backend/.env
+```
+
+Paste the following into `backend/.env` and fill in your values:
 ```env
 MONGODB_URI=mongodb://localhost:27017/felicity
-JWT_SECRET=your_secret_here
+JWT_SECRET=any_long_random_string_here
 PORT=5001
 NODE_ENV=development
 FRONTEND_URL=http://localhost:3000
 
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
-EMAIL_USER=your_email@gmail.com
+EMAIL_USER=your_gmail@gmail.com
 EMAIL_PASS=your_gmail_app_password
-EMAIL_FROM=Felicity Events <your_email@gmail.com>
+EMAIL_FROM=Felicity Events <your_gmail@gmail.com>
 
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 
@@ -270,20 +296,41 @@ ADMIN_EMAIL=admin@felicity.com
 ADMIN_PASSWORD=admin123
 ```
 
-**`frontend/.env`**
+> **Gmail App Password**: Go to Google Account > Security > 2-Step Verification > App Passwords. Generate a password for "Mail". Use that as `EMAIL_PASS`. Your normal Gmail password will not work.
+
+Create `frontend/.env`:
+```bash
+touch frontend/.env
+```
+
+Paste:
 ```env
 REACT_APP_API_URL=http://localhost:5001/api
 DISABLE_ESLINT_PLUGIN=true
 ```
 
-### 4. Run
+### 4. Seed the admin account
 ```bash
-# Terminal 1 — Backend (port 5001)
+node backend/scripts/createAdmin.js
+```
+
+### 5. Run
+
+```bash
+# Option A — two separate terminals
+# Terminal 1: Backend (port 5001)
 npm run dev
 
-# Terminal 2 — Frontend (port 3000)
+# Terminal 2: Frontend (port 3000)
 cd frontend && npm start
+
+# Option B — single terminal (requires concurrently, already installed)
+npm run dev:all
 ```
+
+Open http://localhost:3000 in your browser.
+
+Log in with the admin credentials set in `backend/.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`).
 
 ---
 
