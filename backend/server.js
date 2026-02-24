@@ -20,7 +20,7 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
   process.env.FRONTEND_URL,
-  'https://dassa1.vercel.app',
+  'https://dass-a1-jldm.onrender.com',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://127.0.0.1:3000',
