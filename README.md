@@ -13,7 +13,7 @@ A full-stack MERN event management platform for managing clubs, events, registra
 | **Health Check** | https://felicity-backend-55fy.onrender.com/api/health |
 | **Database** | MongoDB Atlas (cloud) |
 
-> **Note:** Both frontend and backend are hosted on Render's free tier. The first request after inactivity may take 30–60 seconds to wake up.
+> **Note:** Frontend is hosted on Render's free tier. The first request after inactivity may take 30–60 seconds to wake up.
 
 ---
 
@@ -183,7 +183,6 @@ No CSS framework (Material-UI, Tailwind, Bootstrap, etc.) was used. All styling 
 | **cors** | ^2.8 | Express middleware that sets the `Access-Control-Allow-Origin` header. Required because the React frontend (port 3000 / Render subdomain) makes requests to a different origin than the API. |
 | **dotenv** | ^16.3 | Loads environment variables from a `.env` file into `process.env`. Keeps secrets (DB URI, JWT secret, email credentials) out of source code. |
 | **express-validator** | ^7.0 | Declarative request body validation middleware. Validates and sanitises inputs before they reach controller logic, returning structured error arrays on failure. |
-| **concurrently** | ^8.2 | Dev-only utility to run both the backend (`nodemon`) and frontend (`react-scripts start`) processes from a single terminal command (`npm run dev:all`). |
 | **nodemon** | ^3.0 | Dev-only process manager that watches backend files and automatically restarts the Node server on changes. Eliminates the need to manually restart during development. |
 
 ### Frontend
@@ -224,12 +223,13 @@ dass_a1/
 │   │   └── PasswordResetRequest.js
 │   ├── routes/               # Express route definitions
 │   ├── scripts/
-│   │   └── createAdmin.js    # Seeds the initial admin account
+│   │   └── createAdmin.js    # Legacy seed script (auto-init now handles this)
 │   ├── utils/
 │   │   ├── discord.js        # Discord webhook helper
 │   │   ├── email.js          # Nodemailer email templates
 │   │   ├── eventStatus.js    # Computed status logic
 │   │   └── ticket.js         # QR code + ticket ID generation
+│   ├── package.json          # Backend dependencies & start scripts
 │   └── server.js             # App entry point
 ├── frontend/                 # React (Create React App)
 │   ├── src/
@@ -238,11 +238,11 @@ dass_a1/
 │   │   ├── pages/            # All page-level components
 │   │   └── utils/
 │   │       └── api.js        # Axios instance with JWT interceptor
+│   ├── package.json          # Frontend dependencies & start scripts
 │   ├── .env                  # Local dev API URL (not committed)
 │   └── .env.production       # Production API URL (used on Render build)
-├── package.json              # Root — starts backend
 ├── render.yaml               # Render deployment config
-└── deployment.txt            # Live deployment URLs
+└── deployment.txt            # Live deployment URL
 ```
 
 ---
@@ -262,8 +262,8 @@ cd dass_a1
 
 ### 2. Install dependencies
 ```bash
-# Backend
-npm install
+# Backend (run from inside the backend folder)
+cd backend && npm install && cd ..
 
 # Frontend
 cd frontend && npm install && cd ..
@@ -309,28 +309,21 @@ REACT_APP_API_URL=http://localhost:5001/api
 DISABLE_ESLINT_PLUGIN=true
 ```
 
-### 4. Seed the admin account
-```bash
-node backend/scripts/createAdmin.js
-```
-
-### 5. Run
+### 4. Run
 
 ```bash
-# Option A — two separate terminals
 # Terminal 1: Backend (port 5001)
-npm run dev
+cd backend && npm start
 
 # Terminal 2: Frontend (port 3000)
 cd frontend && npm start
-
-# Option B — single terminal (requires concurrently, already installed)
-npm run dev:all
 ```
 
 Open http://localhost:3000 in your browser.
 
 Log in with the admin credentials set in `backend/.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`).
+
+> The admin account is auto-created on first backend startup if it does not already exist. No manual seeding step is needed.
 
 ---
 
