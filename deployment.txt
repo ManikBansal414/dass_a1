@@ -2,10 +2,10 @@
 
 ## Evaluation Links
 
-Frontend:    https://dass-a1-jldm.onrender.com
-Backend API: https://felicity-backend-55fy.onrender.com/api
+Frontend:     https://dass-a1-jldm.onrender.com
+Backend API:  https://felicity-backend-55fy.onrender.com/api
 Health Check: https://felicity-backend-55fy.onrender.com/api/health
-Database:    MongoDB Atlas (cloud)
+Database:     MongoDB Atlas (cloud)
 
 ---
 
@@ -25,31 +25,34 @@ Note: Both services are on Render free tier. Cold-start after inactivity takes
 
 ## Backend — Render Web Service
 
-Repository root: dass_a1/
+Repository root: dass_a1/          (the repo root, not a subfolder)
 Build command:   npm install
 Start command:   node backend/server.js
+Default port:    5000 (overridden to 5001 locally via backend/.env)
+                 On Render, PORT is injected automatically by the platform.
 
-Environment variables to set in the Render dashboard:
+Environment variables configured in the Render dashboard:
 
   NODE_ENV          = production
   PORT              = 5001
   MONGODB_URI       = <MongoDB Atlas connection string>
-  JWT_SECRET        = <long random secret>
+  JWT_SECRET        = <long random secret — see backend/.env for local value>
   FRONTEND_URL      = https://dass-a1-jldm.onrender.com
 
   EMAIL_HOST        = smtp.gmail.com
   EMAIL_PORT        = 587
-  EMAIL_USER        = <gmail address>
-  EMAIL_PASS        = <gmail app password>
-  EMAIL_FROM        = Felicity Events <gmail address>
+  EMAIL_USER        = felecity2k26@gmail.com
+  EMAIL_PASS        = <Gmail app password — set in Render dashboard>
+  EMAIL_FROM        = Felicity Events <felecity2k26@gmail.com>
 
-  DISCORD_WEBHOOK_URL = <optional — per-organizer webhooks set via profile>
+  DISCORD_WEBHOOK_URL = <per-organizer — set by each organizer via their Profile page>
 
   ADMIN_EMAIL       = admin@felicity.com
-  ADMIN_PASSWORD    = <admin password>
+  ADMIN_PASSWORD    = <set in Render dashboard>
 
-The render.yaml at the repository root pre-configures all of the above.
-Sensitive values (marked sync: false) must be entered manually in the dashboard.
+The render.yaml at the repository root pre-configures the service structure.
+Sensitive values (marked sync: false in render.yaml) must be entered manually
+in the Render dashboard under Environment.
 
 ---
 
@@ -58,24 +61,87 @@ Sensitive values (marked sync: false) must be entered manually in the dashboard.
 Repository root: dass_a1/frontend/
 Build command:   npm install && npm run build
 Publish dir:     build
+Framework:       Create React App (react-scripts 5.0.1)
 
-Environment variable to set in the Render dashboard:
+Environment variable configured in the Render dashboard:
 
   REACT_APP_API_URL = https://felicity-backend-55fy.onrender.com/api
+  DISABLE_ESLINT_PLUGIN = true
 
-The frontend reads this at build time via Create React App's REACT_APP_* injection.
-The value is also stored in frontend/.env.production for local production builds.
+These are also stored in frontend/.env.production and used automatically
+when running `npm run build` locally for a production build.
+
+The frontend fallback (if REACT_APP_API_URL is not set) is:
+  http://localhost:5001/    (defined in frontend/src/utils/api.js)
+
+---
+
+## Local Development Environment Files
+
+backend/.env (not committed — create manually):
+
+  MONGODB_URI=mongodb://localhost:27017/felicity
+  JWT_SECRET=<your secret>
+  PORT=5001
+  NODE_ENV=development
+  FRONTEND_URL=http://localhost:3000
+  EMAIL_HOST=smtp.gmail.com
+  EMAIL_PORT=587
+  EMAIL_USER=felecity2k26@gmail.com
+  EMAIL_PASS=<Gmail app password>
+  EMAIL_FROM=Felicity Events <felecity2k26@gmail.com>
+  DISCORD_WEBHOOK_URL=<webhook URL>
+  ADMIN_EMAIL=admin@felicity.com
+  ADMIN_PASSWORD=admin123
+
+frontend/.env (not committed — create manually):
+
+  REACT_APP_API_URL=http://localhost:5001/api
+  DISABLE_ESLINT_PLUGIN=true
 
 ---
 
 ## Database — MongoDB Atlas
 
 1. Create a free M0 cluster at https://cloud.mongodb.com
-2. Add a database user with a password
+2. Add a database user with a username and password
 3. Under Network Access, allow 0.0.0.0/0 (required for Render's dynamic IPs)
 4. Click Connect -> Drivers and copy the connection string:
    mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/felicity?retryWrites=true&w=majority
 5. Set this as MONGODB_URI in the Render backend environment variables
+
+Database name used: felicity
+
+---
+
+## Admin Account
+
+The admin account is auto-seeded on first server start if ADMIN_EMAIL and
+ADMIN_PASSWORD are set in the environment.
+
+To manually create or reset the admin account, run:
+  node backend/scripts/createAdmin.js
+
+Default local credentials:
+  Email:    admin@felicity.com
+  Password: admin123
+
+Organizer accounts are created by the admin from the Admin Dashboard.
+The admin cannot self-register — the account is seeded via the script above.
+
+---
+
+## CORS
+
+The backend explicitly whitelists these origins (hardcoded in backend/server.js):
+  https://dass-a1-jldm.onrender.com
+  http://localhost:3000
+  http://localhost:3001
+  http://127.0.0.1:3000
+
+In development (NODE_ENV=development) all origins are allowed.
+If the frontend URL ever changes, update both server.js and the
+FRONTEND_URL environment variable in the Render dashboard.
 
 ---
 
@@ -83,24 +149,6 @@ The value is also stored in frontend/.env.production for local production builds
 
 1. Push changes to the main branch on GitHub
 2. Render auto-deploys both services on every push (auto-deploy is enabled)
-3. Watch the deploy log in the Render dashboard for errors
-4. After backend deploys, hit the health check URL to confirm it is live:
+3. Watch the deploy log in the Render dashboard for build/start errors
+4. After backend deploys, confirm it is live:
    https://felicity-backend-55fy.onrender.com/api/health
-
----
-
-## CORS
-
-The backend whitelists FRONTEND_URL. If the frontend URL changes, update
-the FRONTEND_URL environment variable in the Render backend service dashboard
-and redeploy.
-
----
-
-## Default Credentials (post-deploy)
-
-Admin email:    admin@felicity.com
-Admin password: (value of ADMIN_PASSWORD env var set during deploy)
-
-The admin account is auto-created on first server start if it does not exist.
-Organizer accounts are created by the admin from the Admin Dashboard.
