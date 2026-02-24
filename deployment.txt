@@ -1,206 +1,106 @@
-# Felicity Event Management System - Deployment Guide
+# Felicity Event Management System — Deployment
 
-## EVALUATION LINKS
+## Evaluation Links
 
-Frontend URL: https://dass-a1-jldm.onrender.com
-
-Backend API URL (base): https://felicity-backend-55fy.onrender.com/api
-
+Frontend:    https://dass-a1-jldm.onrender.com
+Backend API: https://felicity-backend-55fy.onrender.com/api
 Health Check: https://felicity-backend-55fy.onrender.com/api/health
-
-## Deployment Configuration
-
-### Frontend URL
-https://your-frontend-domain.vercel.app
-
-### Backend API URL
-https://your-backend-domain.herokuapp.com/api
-
-## Required Environment Variables
-
-### Backend (.env)
-```
-PORT=5000
-MONGODB_URI=<your_mongodb_atlas_connection_string>
-JWT_SECRET=<your_secure_jwt_secret>
-JWT_EXPIRE=7d
-
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=<your_email>
-EMAIL_PASS=<your_email_app_password>
-
-ADMIN_EMAIL=admin@felicity.com
-ADMIN_PASSWORD=<secure_admin_password>
-
-FRONTEND_URL=<your_frontend_url>
-NODE_ENV=production
-```
-
-### Frontend (Environment Variables in Vercel/Netlify)
-```
-REACT_APP_API_URL=<your_backend_api_url>
-```
-
-## Hosting Recommendations
-
-### Backend Deployment (Choose one):
-1. **Render** (https://render.com)
-   - Free tier available
-   - Automatic HTTPS
-   - Easy deployment from GitHub
-
-2. **Railway** (https://railway.app)
-   - Good free tier
-   - Simple setup
-
-3. **Heroku** (https://heroku.com)
-   - Reliable platform
-   - Easy MongoDB integration
-
-### Frontend Deployment (Choose one):
-1. **Vercel** (https://vercel.com)
-   - Best for React apps
-   - Automatic deployments
-   - Free HTTPS
-
-2. **Netlify** (https://netlify.com)
-   - Easy setup
-   - Continuous deployment
-
-### Database:
-**MongoDB Atlas** (https://www.mongodb.com/cloud/atlas)
-- Free tier: 512 MB storage
-- Global clusters
-- Automatic backups
-
-## Deployment Steps
-
-### 1. Database Setup
-```bash
-1. Create MongoDB Atlas account
-2. Create a new cluster (Free tier M0)
-3. Add database user with password
-4. Whitelist IP addresses (0.0.0.0/0 for all)
-5. Get connection string
-```
-
-### 2. Backend Deployment (Render Example)
-```bash
-1. Push code to GitHub
-2. Connect Render to your GitHub repository
-3. Create new Web Service
-4. Select backend folder as root directory
-5. Build command: npm install
-6. Start command: npm start
-7. Add environment variables from above
-8. Deploy
-```
-
-### 3. Frontend Deployment (Vercel Example)
-```bash
-1. Push code to GitHub
-2. Import project to Vercel
-3. Select client folder as root directory
-4. Framework preset: Create React App
-5. Add environment variables
-6. Deploy
-```
-
-### Quick deploy checklist (copyable commands)
-
-Frontend (Vercel - steps to run locally before deploy):
-```bash
-# from repository root
-cd client
-npm install
-npm run build
-# Verify build output exists in client/build
-ls build
-```
-
-Backend (Render - steps to run locally before deploy):
-```bash
-# from repository root
-cd backend
-npm install
-npm start
-# Confirm server runs on configured PORT (default 5000)
-```
-
-MongoDB Atlas (create connection string):
-1. Sign in to https://www.mongodb.com/cloud/atlas
-2. Create a new free cluster
-3. Create a database user (username/password)
-4. Network Access: Allow access from your deployment IPs or 0.0.0.0/0 (for testing)
-5. Click "Connect" → "Connect your application" and copy the connection string
-   Example: mongodb+srv://<username>:<password>@cluster0.abcd.mongodb.net/felicity?retryWrites=true&w=majority
-6. Set this value as `MONGODB_URI` in your backend environment variables
+Database:    MongoDB Atlas (cloud)
 
 ---
 
-Fill the EVALUATION LINKS above with your deployed URLs before final submission.
+## Hosting
 
-### 4. Post-Deployment
-```bash
-1. Update CORS settings in backend to allow frontend domain
-2. Test admin login with configured credentials
-3. Create test organizer account
-4. Verify email sending (if configured)
-```
+Both the frontend (static site) and backend (web service) are deployed on Render.
+No Vercel, Netlify, Heroku, or Railway is used.
 
-## CORS Configuration
+  Backend  — Render Web Service  — https://felicity-backend-55fy.onrender.com
+  Frontend — Render Static Site  — https://dass-a1-jldm.onrender.com
+  Database — MongoDB Atlas        — cloud-hosted, no local DB needed
 
-Update backend/server.js:
-```javascript
-const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'https://your-frontend-domain.vercel.app'
-  ],
-  credentials: true
-};
+Note: Both services are on Render free tier. Cold-start after inactivity takes
+30-60 seconds on the first request.
 
-app.use(cors(corsOptions));
-```
+---
 
-## SSL/HTTPS
-Both Vercel and Render provide automatic HTTPS certificates.
+## Backend — Render Web Service
 
-## Monitoring & Logs
-- Backend logs available in hosting platform dashboard
-- Set up error tracking (optional): Sentry, LogRocket
+Repository root: dass_a1/
+Build command:   npm install
+Start command:   node backend/server.js
 
-## Backup Strategy
-- MongoDB Atlas provides automatic backups
-- Export data periodically using MongoDB Compass
+Environment variables to set in the Render dashboard:
 
-## Performance Optimization
-1. Enable compression in Express
-2. Use CDN for static assets
-3. Implement caching strategies
-4. Database indexing (already configured in models)
+  NODE_ENV          = production
+  PORT              = 5001
+  MONGODB_URI       = <MongoDB Atlas connection string>
+  JWT_SECRET        = <long random secret>
+  FRONTEND_URL      = https://dass-a1-jldm.onrender.com
 
-## Security Checklist
-✓ Environment variables properly set
-✓ JWT secret is secure and unique
-✓ MongoDB connection uses authentication
-✓ CORS configured for specific domains
-✓ Password hashing enabled (bcrypt)
-✓ HTTPS enforced
-✓ Rate limiting (recommended: express-rate-limit)
-✓ Input validation (express-validator in use)
+  EMAIL_HOST        = smtp.gmail.com
+  EMAIL_PORT        = 587
+  EMAIL_USER        = <gmail address>
+  EMAIL_PASS        = <gmail app password>
+  EMAIL_FROM        = Felicity Events <gmail address>
 
-## Testing Deployment
-1. Test all authentication flows
-2. Create test events as organizer
-3. Register as participant
-4. Verify email delivery
-5. Test admin functions
-6. Check mobile responsiveness
+  DISCORD_WEBHOOK_URL = <optional — per-organizer webhooks set via profile>
 
-## Support & Maintenance
-- Monitor error logs regularly
-- Update dependencies monthly
-- Backup database weekly
-- Review and rotate secrets quarterly
+  ADMIN_EMAIL       = admin@felicity.com
+  ADMIN_PASSWORD    = <admin password>
+
+The render.yaml at the repository root pre-configures all of the above.
+Sensitive values (marked sync: false) must be entered manually in the dashboard.
+
+---
+
+## Frontend — Render Static Site
+
+Repository root: dass_a1/frontend/
+Build command:   npm install && npm run build
+Publish dir:     build
+
+Environment variable to set in the Render dashboard:
+
+  REACT_APP_API_URL = https://felicity-backend-55fy.onrender.com/api
+
+The frontend reads this at build time via Create React App's REACT_APP_* injection.
+The value is also stored in frontend/.env.production for local production builds.
+
+---
+
+## Database — MongoDB Atlas
+
+1. Create a free M0 cluster at https://cloud.mongodb.com
+2. Add a database user with a password
+3. Under Network Access, allow 0.0.0.0/0 (required for Render's dynamic IPs)
+4. Click Connect -> Drivers and copy the connection string:
+   mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/felicity?retryWrites=true&w=majority
+5. Set this as MONGODB_URI in the Render backend environment variables
+
+---
+
+## Redeployment Steps
+
+1. Push changes to the main branch on GitHub
+2. Render auto-deploys both services on every push (auto-deploy is enabled)
+3. Watch the deploy log in the Render dashboard for errors
+4. After backend deploys, hit the health check URL to confirm it is live:
+   https://felicity-backend-55fy.onrender.com/api/health
+
+---
+
+## CORS
+
+The backend whitelists FRONTEND_URL. If the frontend URL changes, update
+the FRONTEND_URL environment variable in the Render backend service dashboard
+and redeploy.
+
+---
+
+## Default Credentials (post-deploy)
+
+Admin email:    admin@felicity.com
+Admin password: (value of ADMIN_PASSWORD env var set during deploy)
+
+The admin account is auto-created on first server start if it does not exist.
+Organizer accounts are created by the admin from the Admin Dashboard.
